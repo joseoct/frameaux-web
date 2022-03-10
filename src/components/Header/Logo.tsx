@@ -10,9 +10,9 @@ export function Logo () {
         fontWeight="bold"
         letterSpacing="tight"
       >
-        dashgo
-        <Text as="span" ml="1" color="pink.500">
-          .
+        frame
+        <Text as="span" color="pink.400">
+          aux
         </Text>
       </Text>
     </Link>
