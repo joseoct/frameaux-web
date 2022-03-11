@@ -1,11 +1,16 @@
-import { Button, Flex, Stack, Text } from '@chakra-ui/react';
+import { Button, Flex, Stack, Text, useBreakpointValue } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useEffect, useState } from 'react';
+import {  useContext, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
+
+import { useInterval } from 'usehooks-ts';
+
 import { Input } from '../components/Form/Input';
 import { Logo } from '../components/Header/Logo';
 
+import { AuthContext } from '../contexts/AuthContext';
+import { withSSRGuest } from '../utils/withSSRGuest';
 
 type AbbreviationTecnologies = {
   abbreviation: string;
@@ -23,6 +28,7 @@ const signInFormSchema = yup.object().shape({
 });
 
 export default function Home() {
+  const { signIn }  = useContext(AuthContext);
 
   const [tecnology, setTecnology] = useState<AbbreviationTecnologies[]>([
     {
@@ -39,18 +45,17 @@ export default function Home() {
     },
   ]);
 
-  useEffect(() => {
-    let cicle = setInterval(() => {
-      const cicleTecnology = [...tecnology];
+  const isLg = useBreakpointValue({ base: false, lg: true, });
 
-      const shiftedTecnology = cicleTecnology.shift();
+  useInterval(() => {
+    const cicleTecnology = [...tecnology];
 
-      cicleTecnology.push(shiftedTecnology);
+    const shiftedTecnology = cicleTecnology.shift();
 
-      setTecnology(cicleTecnology);
-    }, 2000)
-    return () => clearInterval(cicle);
-  }, [tecnology])
+    cicleTecnology.push(shiftedTecnology);
+
+    setTecnology(cicleTecnology);
+  }, 2000)
 
   const {
     register,
@@ -63,14 +68,12 @@ export default function Home() {
   const handleSignIn: SubmitHandler<SignInFormData> = async (data, event) => {
     event.preventDefault();
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    console.log(data);
+    await signIn(data);
   }
 
   return (
     <Flex w="100vw" h="100vh" flexDirection="row">
-      <Flex w="40vw" align="center" justify="center">
+      <Flex w={{ base: '100vw', lg: '40vw' }} align="center" justify="center">
         <Flex
           as="form"
           width="100%"
@@ -91,7 +94,7 @@ export default function Home() {
               label="E-mail"
               type="email"
               error={errors.email}
-              {...register('password')}
+              {...register('email')}
             />
 
             <Input
@@ -115,14 +118,20 @@ export default function Home() {
         </Flex>
       </Flex>
 
-      <Flex w="60vw" align="center" justify="center" bg="gray.800">
+      { isLg && <Flex w="60vw" align="center" justify="center" bg="gray.800">
         <Flex fontSize="240" color="gray.300">
           .
           <Text color={tecnology[0].color}>
             {tecnology[0].abbreviation}
           </Text>
         </Flex>
-      </Flex>
+      </Flex> }
     </Flex>
   );
 }
+
+export const getServerSideProps = withSSRGuest(async (ctx) => {
+  return {
+    props: {}
+  };
+});
