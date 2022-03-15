@@ -1,16 +1,23 @@
 import { ChakraProvider } from '@chakra-ui/react';
 import { AuthProvider } from '../contexts/AuthContext';
+import { SidebarDrawerProvider } from '../contexts/SidebarDrawerContext';
+import { QueryClientProvider } from 'react-query';
+import { queryClient } from '../services/queryClient';
 
 import { theme } from '../styles/theme';
 
 function MyApp({ Component, pageProps }) {
-  return ( 
-    <AuthProvider>
+  return (
+    <QueryClientProvider client={queryClient}>
       <ChakraProvider theme={theme}>
-        <Component {...pageProps} />
+        <AuthProvider>
+          <SidebarDrawerProvider>
+            <Component {...pageProps} />
+          </SidebarDrawerProvider>
+        </AuthProvider>
       </ChakraProvider>
-    </AuthProvider>
-   )
+    </QueryClientProvider>
+  );
 }
 
 export default MyApp

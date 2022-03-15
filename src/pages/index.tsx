@@ -1,6 +1,6 @@
 import { Button, Flex, Stack, Text, useBreakpointValue } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {  useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 

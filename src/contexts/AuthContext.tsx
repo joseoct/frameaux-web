@@ -1,3 +1,4 @@
+import { useToast } from '@chakra-ui/react';
 import Router from 'next/router';
 import { createContext, ReactNode, useEffect, useState } from 'react'; 
 import { api } from '../services/api';
@@ -29,7 +30,7 @@ export const AuthContext = createContext({} as AuthContextData);
 let authChannel: BroadcastChannel;
 
 export function signOut() {
-  destroyCookie(undefined, 'nextauth.token');
+  destroyCookie(undefined, 'fa.to');
 
   Router.push('/');
   
@@ -39,6 +40,8 @@ export function signOut() {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>(null);
   const isAuthenticated = !!user;
+
+  const toast = useToast();
 
   useEffect(() => {
     authChannel = new BroadcastChannel('auth');
@@ -58,19 +61,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   useEffect(() => {
-    const { 'nextauth.token': token  } = parseCookies();
+    const { 'fa.to': token  } = parseCookies();
 
-    if (token) {
-      api.get('/profile')
-        .then(response => {
-          const { email, roles } = response.data;
+    // if (token) {
+    //   api.get('/dashboard')
+    //     .then(response => {
+    //       const { email, roles } = response.data;
 
-          setUser({ email, roles });
-        })
-        .catch(() => {
-          signOut();
-        })
-    }
+    //       setUser({ email, roles });
+    //     })
+    //     .catch(() => {
+    //       signOut();
+    //     })
+    // }
   }, [])
 
   async function signIn({ email, password }: SignInCredentials) {
@@ -82,7 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       const { token, roles } = response.data;
 
-      setCookie(undefined, 'nextauth.token', token, {
+      setCookie(undefined, 'fa.to', token, {
         maxAge: 60 * 60 * 24 * 7, // 30 days
         path: '/',
       })
@@ -98,7 +101,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       authChannel.postMessage('signIn');
     } catch (error) {
-      console.log(error);
+      toast({
+        title: 'Erro na autenticação',
+        description: 'Houve um erro ao fazer login, verifique suas credenciais',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
   }
 
