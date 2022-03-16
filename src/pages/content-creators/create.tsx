@@ -44,7 +44,7 @@ export default function CreateUser() {
   ) => {
     await createUser.mutateAsync(values);
 
-    router.push('/users');
+    router.push('/content-creators');
   };
 
 

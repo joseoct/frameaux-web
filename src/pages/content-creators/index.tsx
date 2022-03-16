@@ -58,13 +58,13 @@ export default function UserList() {
         <Box flex="1" borderRadius="8" bg="gray.800" p="8">
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
-              Usuários
+              Criadores de conteúdo
               {!isLoading && isFetching && (
                 <Spinner size="sm" color="gray.400" ml="4" />
               )}
             </Heading>
 
-            <NextLink href="/users/create" passHref>
+            <NextLink href="/content-creators/create" passHref>
               <Button
                 as="a"
                 size="sm"
@@ -72,7 +72,7 @@ export default function UserList() {
                 colorScheme="pink"
                 leftIcon={<Icon as={RiAddLine}></Icon>}
               >
-                Criar novo usuário
+                Cadastrar novo usuário
               </Button>
             </NextLink>
           </Flex>
@@ -90,19 +90,13 @@ export default function UserList() {
               <Table colorScheme="whiteAlpha">
                 <Thead>
                   <Tr>
-                    <Th px={['2', '4', '6']} color="gray.300" width="8">
-                      <Checkbox colorScheme="pink" />
-                    </Th>
                     <Th>Usuário</Th>
-                    {isLg && <Th>Data de cadastro</Th>}
+                    {isLg && <Th>Tecnologia</Th>}
                   </Tr>
                 </Thead>
                 <Tbody>
                   {data.users.map((user) => (
                     <Tr key={user.id}>
-                      <Td px={['2', '4', '6']}>
-                        <Checkbox colorScheme="pink" />
-                      </Td>
                       <Td>
                         <Box>
                           <Link
@@ -116,7 +110,7 @@ export default function UserList() {
                           </Text>
                         </Box>
                       </Td>
-                      {isLg && <Td>{user.created_at}</Td>}
+                      {isLg && <Td>oi</Td>}
                     </Tr>
                   ))}
                 </Tbody>

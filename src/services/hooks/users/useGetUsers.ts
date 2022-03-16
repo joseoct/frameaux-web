@@ -19,8 +19,7 @@ async function getUsers(page: number): Promise<GetUsersResponse> {
     }
   })
 
-  // const totalCount = Number(headers['x-total-count']);
-  const totalCount = 20;
+  const totalCount = Number(headers['x-total-count']);
 
   return { 
     users: data,

@@ -1,9 +1,15 @@
-import { Box, Flex, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
+import { useState } from 'react';
 
-import { Header } from "../components/Header";
-import { Sidebar } from "../components/Sidebar";
+import { Header } from '../components/Header';
+import { Sidebar } from '../components/Sidebar';
+import { withSSRAuth } from '../utils/withSSRAuth';
 
-export default function Dashboard () {
+import { useGetTotals } from '../services/hooks/dashboard/useGetTotals';
+
+export default function Dashboard() {
+  const { data, isLoading } = useGetTotals();
+
   return (
     <Flex direction="column" h="100vh">
       <Header />
@@ -12,19 +18,71 @@ export default function Dashboard () {
         <Sidebar />
 
         <SimpleGrid flex="1" gap="4" minChildWidth="320px" align-items="flex">
-          <Box p={["6", "8"]} bg="gray.800" borderRadius="8" pb="4">
-            <Text fontSize="large" mb="4">
-              Inscritos da semana
-            </Text>
-          </Box>
-          <Box p={["6", "8"]} bg="gray.800" borderRadius="8" pb="4">
-            <Text fontSize="large" mb="4">
-              Taxa de abertura
-            </Text>
-          </Box>
+          <Flex
+            alignItems="center"
+            flexDirection="column"
+            p={['6', '8']}
+            bg="gray.800"
+            borderRadius="8"
+            pb="4"
+          >
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <>
+                <Text fontSize="large">Criadores de Conteúdo</Text>
+                <Text fontSize="5xl">
+                  {data.totalContentCreators}
+                </Text>
+              </>
+            )}
+          </Flex>
+          <Flex
+            alignItems="center"
+            flexDirection="column"
+            p={['6', '8']}
+            bg="gray.800"
+            borderRadius="8"
+            pb="4"
+          >
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <>
+                <Text fontSize="large">Criadores de Conteúdo</Text>
+                <Text fontSize="5xl">
+                  {data.totalStudents}
+                </Text>
+              </>
+            )}
+          </Flex>
+          <Flex
+            alignItems="center"
+            flexDirection="column"
+            p={['6', '8']}
+            bg="gray.800"
+            borderRadius="8"
+            pb="4"
+          >
+            {isLoading ? (
+              <Spinner />
+            ) : (
+              <>
+                <Text fontSize="large">Criadores de Conteúdo</Text>
+                <Text fontSize="5xl">
+                  {data.totalTecnologies}
+                </Text>
+              </>
+            )}
+          </Flex>
         </SimpleGrid>
-
       </Flex>
     </Flex>
   );
 }
+
+export const getServerSideProps = withSSRAuth(async (ctx) => {
+  return {
+    props: {},
+  };
+});
