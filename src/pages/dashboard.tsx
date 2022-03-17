@@ -49,7 +49,7 @@ export default function Dashboard() {
               <Spinner />
             ) : (
               <>
-                <Text fontSize="large">Criadores de Conteúdo</Text>
+                <Text fontSize="large">Estudantes</Text>
                 <Text fontSize="5xl">
                   {data.totalStudents}
                 </Text>
@@ -68,7 +68,7 @@ export default function Dashboard() {
               <Spinner />
             ) : (
               <>
-                <Text fontSize="large">Criadores de Conteúdo</Text>
+                <Text fontSize="large">Tecnologias</Text>
                 <Text fontSize="5xl">
                   {data.totalTecnologies}
                 </Text>
