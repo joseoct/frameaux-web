@@ -1,30 +1,52 @@
-import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  HStack,
+  SimpleGrid,
+  VStack,
+  Text,
+  Icon,
+  Image,
+  useToast,
+} from '@chakra-ui/react';
 import Link from 'next/link';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup'
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
+import ImageUploading from 'react-images-uploading';
 
 import { Input } from '../../components/Form/Input';
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
-import { useCreateUsers } from '../../services/hooks/users/useCreateUsers';
+import { useState } from 'react';
+import { RiAddLine } from 'react-icons/ri';
+import ContentCreatorsTable from '../../components/ContentCreatorsTable';
 
-type CreateUserFormData = {
+import { useCreateTecnologies } from '../../services/hooks/tecnologies/useCreateTecnologies';
+
+type CreateTecnologyFormData = {
   name: string;
-  password: string;
-  password_confirmation: string;
-}
+  tecnology_image: File;
+  content_creators_ids: string;
+};
 
 const signInFormSchema = yup.object().shape({
-  tecnology_name: yup.string().required(),
+  name: yup.string().required('Nome é obrigatório'),
 });
 
 export default function CreateUser() {
-
   const router = useRouter();
 
-  const createUser = useCreateUsers();
+  const createTecnology = useCreateTecnologies();
+
+  const [images, setImages] = useState([]);
+  const [contentCreatorsIds, setContentCreatorsIds] = useState<string[]>([]);
+
+  const toast = useToast();
 
   const {
     register,
@@ -34,14 +56,58 @@ export default function CreateUser() {
     resolver: yupResolver(signInFormSchema),
   });
 
-  const handleCreateUser: SubmitHandler<CreateUserFormData> = async (
-    values,
-  ) => {
-    await createUser.mutateAsync(values);
-
-    router.push('/content-creators');
+  const onImageChange = (imageList) => {
+    setImages(imageList);
   };
 
+  const handleCreateTecnology: SubmitHandler<CreateTecnologyFormData> = async (
+    values,
+  ) => {
+    if (images.length === 0) {
+      toast({
+        title: 'Error',
+        description: 'O logo da tecnologia deve ser informado',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+
+      return;
+    }
+
+    if(contentCreatorsIds.length === 0) {
+      toast({
+        title: 'Error',
+        description: 'Você deve alocar pelo menos um criador de conteúdo',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append('name', values.name);
+    formData.append('tecnology_image', images[0].file);
+    formData.append('content_creators_ids', JSON.stringify(contentCreatorsIds));
+
+    try {
+      await createTecnology.mutateAsync(formData);
+
+      router.push('/tecnologies');
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Erro ao cadastrar tecnologia',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+
+  };
 
   return (
     <Box>
@@ -56,10 +122,10 @@ export default function CreateUser() {
           borderRadius="8"
           bg="gray.800"
           p={['6', '8']}
-          onSubmit={handleSubmit(handleCreateUser)}
+          onSubmit={handleSubmit(handleCreateTecnology)}
         >
           <Heading size="lg" fontWeight="normal">
-            Cadastrar tecnologia 
+            Cadastrar tecnologia
           </Heading>
 
           <Divider my="6" borderColor="gray.700" />
@@ -68,13 +134,80 @@ export default function CreateUser() {
             <SimpleGrid minChildWidth="240px" spacing={['4', '8']} w="100%">
               <Input
                 name="tecnology_name"
-                label="Nome da tecnologia"
+                label="Nome"
                 type="text"
                 error={errors.name}
                 {...register('name')}
               />
             </SimpleGrid>
+
+            <ImageUploading
+              multiple={false}
+              value={images}
+              onChange={onImageChange}
+              maxNumber={1}
+              dataURLKey="data_url"
+            >
+              {({ imageList, onImageUpload, onImageUpdate, onImageRemove }) => (
+                <>
+                  <VStack>
+                    <Text fontWeight="bold" letterSpacing="tight">
+                      Logo
+                    </Text>
+
+                    <Flex
+                      cursor={imageList[0] ? 'default' : 'pointer'}
+                      onClick={imageList[0] ? null : onImageUpload}
+                      justifyContent="center"
+                      alignItems="center"
+                      w="180px"
+                      h="180px"
+                      border="1px"
+                      borderColor="pink.400"
+                    >
+                      {imageList.length > 0 ? (
+                        <Image
+                          boxSize="160px"
+                          src={imageList[0].data_url}
+                          alt="logo"
+                        />
+                      ) : (
+                        <>
+                          <Icon w={16} h={16} as={RiAddLine}></Icon>
+                        </>
+                      )}
+                    </Flex>
+
+                    {imageList.length > 0 && (
+                      <HStack>
+                        <Button
+                          colorScheme="pink"
+                          onClick={() => onImageUpdate(0)}
+                        >
+                          Alterar
+                        </Button>
+
+                        <Button
+                          colorScheme="pink"
+                          onClick={() => onImageRemove(0)}
+                        >
+                          Remover
+                        </Button>
+                      </HStack>
+                    )}
+                  </VStack>
+                </>
+              )}
+            </ImageUploading>
           </VStack>
+
+          <ContentCreatorsTable
+            title="Alocar criadores de conteúdo"
+            registerButton={false}
+            checkbox
+            contentCreatorsIds={contentCreatorsIds}
+            setContentCreatorsIds={setContentCreatorsIds}
+          />
 
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
