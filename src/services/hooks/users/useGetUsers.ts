@@ -1,10 +1,20 @@
 import { useQuery } from "react-query";
 import { api } from "../../api";
 
+type Tecnology = {
+  id: string;
+  name: string;
+}
+
+type UserTecnology = {
+  tecnology: Tecnology;
+}
+
 type User = {
   id: string;
   name: string;
   email: string;
+  UserTecnology: UserTecnology[];
 }
 
 type GetUsersResponse = {
@@ -13,7 +23,7 @@ type GetUsersResponse = {
 }
 
 async function getUsers(page: number): Promise<GetUsersResponse> {
-  const { data, headers } = await api.get('/users/content-creators', {
+  const { data, headers } = await api.get('/content-creators', {
     params: {
       page: page,
     }

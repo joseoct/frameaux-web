@@ -17,12 +17,7 @@ type CreateUserFormData = {
 }
 
 const signInFormSchema = yup.object().shape({
-  name: yup.string().required(),
-  email: yup.string().email().required(),
-  password: yup.string().required().min(6),
-  password_confirmation: yup
-    .string()
-    .oneOf([null, yup.ref('password')], 'Passwords must match'),
+  tecnology_name: yup.string().required(),
 });
 
 export default function CreateUser() {
@@ -64,7 +59,7 @@ export default function CreateUser() {
           onSubmit={handleSubmit(handleCreateUser)}
         >
           <Heading size="lg" fontWeight="normal">
-            Criar usuário
+            Cadastrar tecnologia 
           </Heading>
 
           <Divider my="6" borderColor="gray.700" />
@@ -72,35 +67,11 @@ export default function CreateUser() {
           <VStack spacing="8">
             <SimpleGrid minChildWidth="240px" spacing={['4', '8']} w="100%">
               <Input
-                name="name"
-                label="Nome completo"
+                name="tecnology_name"
+                label="Nome da tecnologia"
                 type="text"
                 error={errors.name}
                 {...register('name')}
-              />
-              <Input
-                name="email"
-                label="E-mail"
-                type="email"
-                error={errors.email}
-                {...register('email')}
-              />
-            </SimpleGrid>
-
-            <SimpleGrid minChildWidth="240px" spacing={['4', '8']} w="100%">
-              <Input
-                name="password"
-                label="Senha"
-                type="password"
-                error={errors.password}
-                {...register('password')}
-              />
-              <Input
-                name="password_confirmation"
-                label="Confirmar senha"
-                type="password"
-                error={errors.password_confirmation}
-                {...register('password_confirmation')}
               />
             </SimpleGrid>
           </VStack>

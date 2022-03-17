@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from '@chakra-ui/react';
+import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, useToast, VStack } from '@chakra-ui/react';
 import Link from 'next/link';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -28,6 +28,7 @@ const signInFormSchema = yup.object().shape({
 export default function CreateUser() {
 
   const router = useRouter();
+  const toast = useToast();
 
   const createUser = useCreateUsers();
 
@@ -42,11 +43,23 @@ export default function CreateUser() {
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (
     values,
   ) => {
-    await createUser.mutateAsync(values);
+    delete values.password_confirmation;
 
-    router.push('/content-creators');
+    try {
+      await createUser.mutateAsync(values);
+
+      router.push('/content-creators');
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Erro ao cadastrar, o email já pode ter sido cadastrado',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+
   };
-
 
   return (
     <Box>
@@ -64,7 +77,7 @@ export default function CreateUser() {
           onSubmit={handleSubmit(handleCreateUser)}
         >
           <Heading size="lg" fontWeight="normal">
-            Criar usuário
+            Cadastrar um criador de conteúdo 
           </Heading>
 
           <Divider my="6" borderColor="gray.700" />
@@ -111,7 +124,7 @@ export default function CreateUser() {
                 <Button colorScheme="whiteAlpha">Cancelar</Button>
               </Link>
               <Button type="submit" colorScheme="pink" isLoading={isSubmitting}>
-                Salvar
+                Cadastrar
               </Button>
             </HStack>
           </Flex>

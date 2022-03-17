@@ -50,7 +50,7 @@ export default function UserList() {
               )}
             </Heading>
 
-            <NextLink href="/content-creators/create" passHref>
+            <NextLink href="/tecnologies/create" passHref>
               <Button
                 as="a"
                 size="sm"
@@ -81,21 +81,23 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map((user) => (
-                    <Tr key={user.id}>
+                  {data.map((tecnology) => (
+                    <Tr key={tecnology.id}>
                       <Td>
                         <HStack>
                           <Image
                             boxSize="48px"
-                            src={user.tecnology_image}
-                            alt={user.tecnology_image}
+                            src={tecnology.tecnology_image}
+                            alt={tecnology.tecnology_image}
                           />
                           <Link color="purple.400">
-                            <Text fontWeight="bold">{user.name}</Text>
+                            <Text fontWeight="bold">{tecnology.name}</Text>
                           </Link>
                         </HStack>
                       </Td>
-                      {isLg && <Td>Responsáveis</Td>}
+                      {isLg && <Td>{tecnology.UserTecnology.map(userTecnology => (
+                        <Text key={userTecnology.user.id}>{userTecnology.user.name}</Text>
+                      ))}</Td>}
                     </Tr>
                   ))}
                 </Tbody>

@@ -72,7 +72,7 @@ export default function UserList() {
                 colorScheme="pink"
                 leftIcon={<Icon as={RiAddLine}></Icon>}
               >
-                Cadastrar novo usuário
+                Cadastrar novo criador de conteúdo
               </Button>
             </NextLink>
           </Flex>
@@ -91,26 +91,28 @@ export default function UserList() {
                 <Thead>
                   <Tr>
                     <Th>Usuário</Th>
-                    {isLg && <Th>Tecnologia</Th>}
+                    {isLg && <Th>Tecnologias</Th>}
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.users.map((user) => (
-                    <Tr key={user.id}>
+                  {data.users.map((contentCreator) => (
+                    <Tr key={contentCreator.id}>
                       <Td>
                         <Box>
                           <Link
                             color="purple.400"
-                            onMouseEnter={() => handlePrefetchUser(user.id)}
+                            onMouseEnter={() => handlePrefetchUser(contentCreator.id)}
                           >
-                            <Text fontWeight="bold">{user.name}</Text>
+                            <Text fontWeight="bold">{contentCreator.name}</Text>
                           </Link>
                           <Text fontSize="sm" color="gray.300">
-                            {user.email}
+                            {contentCreator.email}
                           </Text>
                         </Box>
                       </Td>
-                      {isLg && <Td>oi</Td>}
+                      {isLg && <Td>{ contentCreator.UserTecnology.map(userTecnology => (
+                        <Text key={userTecnology.tecnology.id}>{userTecnology.tecnology.name}</Text>
+                      )) }</Td>}
                     </Tr>
                   ))}
                 </Tbody>

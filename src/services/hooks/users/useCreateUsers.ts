@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { useMutation } from "react-query";
 import { api } from "../../api";
 import { queryClient } from "../../queryClient";
@@ -5,19 +6,17 @@ import { queryClient } from "../../queryClient";
 type CreateUserFormData = {
   name: string;
   password: string;
-  password_confirmation: string;
 }
 
 async function createUser (user: CreateUserFormData) {
-  return await api.post('users', {
-    user: {
-      ...user,
-      created_at: new Date(),
-    },
-  });
+  const response = await api .post('content-creators', user)
+
+  return response;
 }
 
 export function useCreateUsers () {
+  const toast = useToast();
+
   return useMutation(createUser, {
     onSuccess: () => {
       queryClient.invalidateQueries('users');
