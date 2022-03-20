@@ -5,8 +5,10 @@ import { api } from '../services/api';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
 
 type User = {
+  id: string;
+  name: string;
   email: string;
-  roles: string[];
+  role: string;
 }
 
 type SignInCredentials = {
@@ -31,10 +33,11 @@ let authChannel: BroadcastChannel;
 
 export function signOut() {
   destroyCookie(undefined, 'fa.to');
+  destroyCookie(undefined, 'fa.user_id');
 
   Router.push('/');
   
-  authChannel.postMessage('signOut');
+  // authChannel.postMessage('signOut');
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -43,37 +46,37 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const toast = useToast();
 
-  useEffect(() => {
-    authChannel = new BroadcastChannel('auth');
+  // useEffect(() => {
+  //   authChannel = new BroadcastChannel('auth');
 
-    authChannel.onmessage = (message) => {
-      switch (message.data){
-        case 'signOut':
-          Router.push('/');
-          break;
-        case 'signIn':
-          Router.push('/dashboard');
-          break;
-        default:
-          break;
-      }
-    }
-  }, []);
+  //   authChannel.onmessage = (message) => {
+  //     switch (message.data){
+  //       case 'signOut':
+  //         Router.push('/');
+  //         break;
+  //       case 'signIn':
+  //         Router.push('/dashboard');
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   }
+  // }, []);
 
   useEffect(() => {
     const { 'fa.to': token  } = parseCookies();
 
-    // if (token) {
-    //   api.get('/dashboard')
-    //     .then(response => {
-    //       const { email, roles } = response.data;
+    if (token) {
+      api.get('/profile')
+        .then(response => {
+          const { id, name, email, role } = response.data;
 
-    //       setUser({ email, roles });
-    //     })
-    //     .catch(() => {
-    //       signOut();
-    //     })
-    // }
+          setUser({ id, name, email, role: role.name });
+        })
+        .catch((error) => {
+          signOut();
+        })
+    }
   }, [])
 
   async function signIn({ email, password }: SignInCredentials) {
@@ -83,23 +86,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
       });
 
-      const { token, roles } = response.data;
+      const { token, user } = response.data;
 
       setCookie(undefined, 'fa.to', token, {
         maxAge: 60 * 60 * 24 * 7, // 30 days
         path: '/',
       })
 
-      setUser({
-        email,
-        roles,
+      setCookie(undefined, 'fa.user_id', user.id, {
+        maxAge: 60 * 60 * 24 * 7, // 30 days
+        path: '/',
       })
 
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
-      Router.push('/dashboard');
 
-      authChannel.postMessage('signIn');
+      if (user.role.name === 'administrator') {
+        Router.push('/dashboard');
+      } else {
+        Router.push('/technologies/construction');
+      }
+
+      // authChannel.postMessage('signIn');
     } catch (error) {
       toast({
         title: 'Erro na autenticação',

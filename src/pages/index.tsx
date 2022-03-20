@@ -12,7 +12,7 @@ import { Logo } from '../components/Header/Logo';
 import { AuthContext } from '../contexts/AuthContext';
 import { withSSRGuest } from '../utils/withSSRGuest';
 
-type AbbreviationTecnologies = {
+type AbbreviationTechnologies = {
   abbreviation: string;
   color: string;
 }
@@ -30,7 +30,7 @@ const signInFormSchema = yup.object().shape({
 export default function Home() {
   const { signIn }  = useContext(AuthContext);
 
-  const [tecnology, setTecnology] = useState<AbbreviationTecnologies[]>([
+  const [technology, setTechnology] = useState<AbbreviationTechnologies[]>([
     {
       abbreviation: 'tsx',
       color: '#0074c2',
@@ -48,13 +48,13 @@ export default function Home() {
   const isLg = useBreakpointValue({ base: false, lg: true, });
 
   useInterval(() => {
-    const cicleTecnology = [...tecnology];
+    const cicleTechnology = [...technology];
 
-    const shiftedTecnology = cicleTecnology.shift();
+    const shiftedTechnology = cicleTechnology.shift();
 
-    cicleTecnology.push(shiftedTecnology);
+    cicleTechnology.push(shiftedTechnology);
 
-    setTecnology(cicleTecnology);
+    setTechnology(cicleTechnology);
   }, 2000)
 
   const {
@@ -121,8 +121,8 @@ export default function Home() {
       { isLg && <Flex w="60vw" align="center" justify="center" bg="gray.800">
         <Flex fontSize="240" color="gray.300">
           .
-          <Text color={tecnology[0].color}>
-            {tecnology[0].abbreviation}
+          <Text color={technology[0].color}>
+            {technology[0].abbreviation}
           </Text>
         </Flex>
       </Flex> }

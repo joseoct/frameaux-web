@@ -24,10 +24,10 @@ import { RiAddLine } from 'react-icons/ri';
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
 
-import { useGetTecnologies } from '../../services/hooks/tecnologies/useGetTecnologies';
+import { useGetTechnologies } from '../../services/hooks/technologies/useGetTechnologies';
 
-export default function UserList() {
-  const { data, isLoading, isFetching, error } = useGetTecnologies();
+export default function Technologies() {
+  const { data, isLoading, isFetching, error } = useGetTechnologies();
 
   const isLg = useBreakpointValue({
     base: false,
@@ -50,7 +50,7 @@ export default function UserList() {
               )}
             </Heading>
 
-            <NextLink href="/tecnologies/create" passHref>
+            <NextLink href="/technologies/create" passHref>
               <Button
                 as="a"
                 size="sm"
@@ -81,22 +81,22 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map((tecnology) => (
-                    <Tr key={tecnology.id}>
+                  {data.map((technology) => (
+                    <Tr key={technology.id}>
                       <Td>
                         <HStack>
                           <Image
                             boxSize="48px"
-                            src={tecnology.tecnology_image}
-                            alt={tecnology.tecnology_image}
+                            src={technology.technology_image}
+                            alt={technology.technology_image}
                           />
                           <Link color="purple.400">
-                            <Text fontWeight="bold">{tecnology.name}</Text>
+                            <Text fontWeight="bold">{technology.name}</Text>
                           </Link>
                         </HStack>
                       </Td>
-                      {isLg && <Td>{tecnology.UserTecnology.map(userTecnology => (
-                        <Text key={userTecnology.user.id}>{userTecnology.user.name}</Text>
+                      {isLg && <Td>{technology.UserTechnology.map(userTechnology => (
+                        <Text key={userTechnology.user.id}>{userTechnology.user.name}</Text>
                       ))}</Td>}
                     </Tr>
                   ))}

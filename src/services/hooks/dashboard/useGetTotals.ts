@@ -4,7 +4,7 @@ import { api } from "../../api";
 type TotalsResponse = {
   totalContentCreators: number;
   totalStudents: number;
-  totalTecnologies: number;
+  totalTechnologies: number;
 }
 
 async function getTotals(): Promise<TotalsResponse> {

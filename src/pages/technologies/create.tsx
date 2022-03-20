@@ -17,7 +17,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
-import ImageUploading from 'react-images-uploading';
+import ImageUploading, { ImageListType } from 'react-images-uploading';
 
 import { Input } from '../../components/Form/Input';
 import { Header } from '../../components/Header';
@@ -26,11 +26,11 @@ import { useState } from 'react';
 import { RiAddLine } from 'react-icons/ri';
 import ContentCreatorsTable from '../../components/ContentCreatorsTable';
 
-import { useCreateTecnologies } from '../../services/hooks/tecnologies/useCreateTecnologies';
+import { useCreateTechnologies } from '../../services/hooks/technologies/useCreateTechnologies';
 
-type CreateTecnologyFormData = {
+type CreateTechnologyFormData = {
   name: string;
-  tecnology_image: File;
+  technology_image: File;
   content_creators_ids: string;
 };
 
@@ -38,10 +38,10 @@ const signInFormSchema = yup.object().shape({
   name: yup.string().required('Nome é obrigatório'),
 });
 
-export default function CreateUser() {
+export default function CreateTechnology() {
   const router = useRouter();
 
-  const createTecnology = useCreateTecnologies();
+  const createTechnology = useCreateTechnologies();
 
   const [images, setImages] = useState([]);
   const [contentCreatorsIds, setContentCreatorsIds] = useState<string[]>([]);
@@ -56,11 +56,11 @@ export default function CreateUser() {
     resolver: yupResolver(signInFormSchema),
   });
 
-  const onImageChange = (imageList) => {
+  const onImageChange = (imageList: ImageListType) => {
     setImages(imageList);
   };
 
-  const handleCreateTecnology: SubmitHandler<CreateTecnologyFormData> = async (
+  const handleCreateTechnology: SubmitHandler<CreateTechnologyFormData> = async (
     values,
   ) => {
     if (images.length === 0) {
@@ -90,13 +90,13 @@ export default function CreateUser() {
     const formData = new FormData();
 
     formData.append('name', values.name);
-    formData.append('tecnology_image', images[0].file);
+    formData.append('technology_image', images[0].file);
     formData.append('content_creators_ids', JSON.stringify(contentCreatorsIds));
 
     try {
-      await createTecnology.mutateAsync(formData);
+      await createTechnology.mutateAsync(formData);
 
-      router.push('/tecnologies');
+      router.push('/technologies');
     } catch (error) {
       toast({
         title: 'Error',
@@ -122,7 +122,7 @@ export default function CreateUser() {
           borderRadius="8"
           bg="gray.800"
           p={['6', '8']}
-          onSubmit={handleSubmit(handleCreateTecnology)}
+          onSubmit={handleSubmit(handleCreateTechnology)}
         >
           <Heading size="lg" fontWeight="normal">
             Cadastrar tecnologia
@@ -133,7 +133,7 @@ export default function CreateUser() {
           <VStack spacing="8">
             <SimpleGrid minChildWidth="240px" spacing={['4', '8']} w="100%">
               <Input
-                name="tecnology_name"
+                name="technology_name"
                 label="Nome"
                 type="text"
                 error={errors.name}
@@ -211,7 +211,7 @@ export default function CreateUser() {
 
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
-              <Link href="/users" passHref>
+              <Link href="/technologies" passHref>
                 <Button colorScheme="whiteAlpha">Cancelar</Button>
               </Link>
               <Button type="submit" colorScheme="pink" isLoading={isSubmitting}>

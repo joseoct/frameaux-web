@@ -6,7 +6,7 @@ import ContentCreatorsTable from '../../components/ContentCreatorsTable';
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
 
-export default function UserList() {
+export default function ContentCreators() {
   return (
     <Box>
       <Header />

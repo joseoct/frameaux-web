@@ -17,11 +17,11 @@ import {
   Link
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
-import { useState, Dispatch, SetStateAction, useEffect } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 import { RiAddLine } from 'react-icons/ri';
 
 import { Pagination } from '../components/Pagination';
-import { useGetUsers } from '../services/hooks/users/useGetUsers';
+import { useGetContentCreators } from '../services/hooks/users/useGetContentCreators';
 
 type ContentCreatorsTableProps = {
   title: string;
@@ -39,7 +39,7 @@ export default function ContentCreatorsTable({
   setContentCreatorsIds,
 }: ContentCreatorsTableProps) {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isFetching, error } = useGetUsers(page);
+  const { data, isLoading, isFetching, error } = useGetContentCreators(page);
 
   const isLg = useBreakpointValue({
     base: false,
@@ -100,7 +100,7 @@ export default function ContentCreatorsTable({
               </Tr>
             </Thead>
             <Tbody>
-              {data.users.map((contentCreator) => (
+              {data.contentCreators.map((contentCreator) => (
                 <Tr key={contentCreator.id}>
                   {checkbox && (
                     <Td px={['2', '4', '6']}>
@@ -125,9 +125,9 @@ export default function ContentCreatorsTable({
                   </Td>
                   {isLg && (
                     <Td>
-                      {contentCreator.UserTecnology.map((userTecnology) => (
-                        <Text key={userTecnology.tecnology.id}>
-                          {userTecnology.tecnology.name}
+                      {contentCreator.UserTechnology?.map((userTechnology) => (
+                        <Text key={userTechnology.technology.id}>
+                          {userTechnology.technology.name}
                         </Text>
                       ))}
                     </Td>

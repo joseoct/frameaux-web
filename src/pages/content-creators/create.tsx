@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { Input } from '../../components/Form/Input';
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
-import { useCreateUsers } from '../../services/hooks/users/useCreateUsers';
+import { useCreateContentCreators } from '../../services/hooks/users/useCreateContentCreator';
 
 type CreateUserFormData = {
   name: string;
@@ -25,12 +25,12 @@ const signInFormSchema = yup.object().shape({
     .oneOf([null, yup.ref('password')], 'Passwords must match'),
 });
 
-export default function CreateUser() {
+export default function CreateContentCreator() {
 
   const router = useRouter();
   const toast = useToast();
 
-  const createUser = useCreateUsers();
+  const createContentCreator = useCreateContentCreators();
 
   const {
     register,
@@ -46,7 +46,7 @@ export default function CreateUser() {
     delete values.password_confirmation;
 
     try {
-      await createUser.mutateAsync(values);
+      await createContentCreator.mutateAsync(values);
 
       router.push('/content-creators');
     } catch (error) {

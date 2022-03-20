@@ -70,7 +70,7 @@ export default function Dashboard() {
               <>
                 <Text fontSize="large">Tecnologias</Text>
                 <Text fontSize="5xl">
-                  {data.totalTecnologies}
+                  {data.totalTechnologies}
                 </Text>
               </>
             )}
