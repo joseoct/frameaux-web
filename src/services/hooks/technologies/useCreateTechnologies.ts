@@ -10,7 +10,8 @@ type CreateTechnologyFormData = {
 }
 
 async function createTechnology (technology: FormData) {
-  const response = await api .post('content-creators-technologies', technology)
+  const response = await api.post('content-creators-technologies', technology)
+  console.log(response);
 
   return response;
 }

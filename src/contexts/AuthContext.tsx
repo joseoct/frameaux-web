@@ -1,6 +1,6 @@
 import { useToast } from '@chakra-ui/react';
 import Router from 'next/router';
-import { createContext, ReactNode, useEffect, useState } from 'react'; 
+import { createContext, ReactNode, useEffect, useState } from 'react';
 import { api } from '../services/api';
 import { setCookie, parseCookies, destroyCookie } from 'nookies';
 
@@ -9,7 +9,7 @@ type User = {
   name: string;
   email: string;
   role: string;
-}
+};
 
 type SignInCredentials = {
   email: string;
@@ -33,10 +33,9 @@ let authChannel: BroadcastChannel;
 
 export function signOut() {
   destroyCookie(undefined, 'fa.to');
-  destroyCookie(undefined, 'fa.user_id');
 
   Router.push('/');
-  
+
   // authChannel.postMessage('signOut');
 }
 
@@ -64,20 +63,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // }, []);
 
   useEffect(() => {
-    const { 'fa.to': token  } = parseCookies();
+    const { 'fa.to': token } = parseCookies();
 
     if (token) {
-      api.get('/profile')
-        .then(response => {
+      api
+        .get('/profile')
+        .then((response) => {
           const { id, name, email, role } = response.data;
 
           setUser({ id, name, email, role: role.name });
         })
         .catch((error) => {
           signOut();
-        })
+        });
     }
-  }, [])
+  }, []);
 
   async function signIn({ email, password }: SignInCredentials) {
     try {
@@ -91,15 +91,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setCookie(undefined, 'fa.to', token, {
         maxAge: 60 * 60 * 24 * 7, // 30 days
         path: '/',
-      })
+      });
 
-      setCookie(undefined, 'fa.user_id', user.id, {
-        maxAge: 60 * 60 * 24 * 7, // 30 days
-        path: '/',
-      })
+      setUser({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role.name,
+      });
 
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
-
 
       if (user.role.name === 'administrator') {
         Router.push('/dashboard');
@@ -120,7 +121,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, signOut,isAuthenticated, user }}>
+    <AuthContext.Provider value={{ signIn, signOut, isAuthenticated, user }}>
       {children}
     </AuthContext.Provider>
   );
