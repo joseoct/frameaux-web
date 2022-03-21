@@ -9,8 +9,7 @@ import decode from 'jwt-decode';
 import { validateUserPermissions } from './validateUserPermissions';
 
 type WithSSRAuthOptions = {
-  permissions?: string[];
-  roles?: string[];
+  roles: string[];
 };
 
 export function withSSRAuth<P>(
@@ -33,13 +32,12 @@ export function withSSRAuth<P>(
     }
 
     if (options) {
-      const user = decode<{ permissions: string[]; roles: string[] }>(token);
-      const { permissions, roles } = options;
+      const user = decode<{ role: string }>(token);
+      const { roles } = options;
 
       const userHasValidPermissions = validateUserPermissions({
         user,
-        permissions,
-        roles,
+        roles
       });
 
       if (!userHasValidPermissions) {
@@ -57,7 +55,6 @@ export function withSSRAuth<P>(
     } catch (err) {
       if (err instanceof AuthTokenError) {
         destroyCookie(ctx, 'fa.to');
-        destroyCookie(ctx, 'nextauth.refreshToken');
 
         return {
           redirect: {

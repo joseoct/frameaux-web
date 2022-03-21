@@ -1,30 +1,36 @@
 import {
-  Flex,
-  Text,
-  Image,
-  Box,
-  VStack,
-  Select,
-  SimpleGrid,
   Button,
-  Stack,
+  Flex,
+  HStack,
+  Image,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
   ModalBody,
+  ModalCloseButton,
+  ModalContent,
   ModalFooter,
-  useDisclosure,
+  ModalHeader,
+  ModalOverlay,
+  SimpleGrid,
+  Stack,
+  Text,
   Textarea,
+  useDisclosure,
+  useToast,
+  VStack,
 } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import * as yup from 'yup';
 import { Input } from '../../../components/Form/Input';
-
+import { Select } from '../../../components/Form/Select';
 import { Header } from '../../../components/Header';
+import { TopicPopover } from '../../../components/Popover/TopicPopover';
 import { Sidebar } from '../../../components/Sidebar';
 import { api } from '../../../services/api';
+import { useCreateTopic } from '../../../services/hooks/topics/useCreateTopic';
+import { useGetTopics } from '../../../services/hooks/topics/useGetTopics';
 
 interface TechnologyProps {
   technology: {
@@ -34,14 +40,61 @@ interface TechnologyProps {
   };
 }
 
+type CreateTopicFormData = {
+  name: string;
+  layer: number;
+  explanation: string;
+}
+
+const createTopicSchema = yup.object().shape({
+  name: yup.string().required("O nome é obrigatório"),
+  layer: yup.number().required(),
+  explanation: yup.string().required(),
+});
+
 export default function TechnologiesConstruction({
   technology,
 }: TechnologyProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const oi = 8;
+  const { data } = useGetTopics(technology.id);
 
-  const arr = new Array(oi).fill(0);
+  const maxLayerArr = new Array(data?.maxLayer).fill(0);
+
+  const createTopic = useCreateTopic();
+  const toast = useToast();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    resolver: yupResolver(createTopicSchema),
+  });
+
+  const handleCreateTopic: SubmitHandler<CreateTopicFormData> = async (
+    values,
+  ) => {
+    
+    try {
+      await createTopic.mutateAsync({
+        topic: values,
+        technology_id: technology.id,
+      });
+
+      reset();
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Erro ao cadastrar tópico',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+
+  };
 
   return (
     <>
@@ -54,12 +107,30 @@ export default function TechnologiesConstruction({
         <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
           <Sidebar />
 
-          <VStack w="100%" alignItems="center">
-            <Box bg="gray.800" boxSize="80px" borderRadius="50%"></Box>
-            <Box bg="gray.800" boxSize="80px" borderRadius="50%"></Box>
-          </VStack>
+          <Stack
+            mb="18px"
+            direction="column"
+            w="100%"
+            alignItems="center"
+            spacing="8"
+          >
+            {data?.layerTopics.map((topics, index) => (
+              <HStack spacing="6" key={index}>
+                {topics.map((topic) => (
+                  <TopicPopover key={topic.id} topic={topic}/>
+                ))}
+              </HStack>
+            ))}
+          </Stack>
 
-          <VStack position="relative" p="4" bg="gray.800" ml="8" spacing="4">
+          <VStack
+            maxHeight="390px"
+            position="relative"
+            p="4"
+            bg="gray.800"
+            ml="8"
+            spacing="4"
+          >
             <Text
               w="320px"
               textAlign="center"
@@ -70,76 +141,76 @@ export default function TechnologiesConstruction({
               Criação de Tópicos
             </Text>
 
-            <SimpleGrid minChildWidth="240px" spacing={['4', '8']} w="100%">
+            <SimpleGrid
+              as="form"
+              minChildWidth="240px"
+              spacing={['4', '8']}
+              w="100%"
+              onSubmit={handleSubmit(handleCreateTopic)}
+            >
               <Input
                 name="name"
                 label="Nome"
                 type="text"
-                // error={errors.name}
-                // {...register('name')}
+                error={errors.name}
+                {...register('name')}
               />
 
+              <Select
+                label="Camada"
+                maxLayer={maxLayerArr}
+                error={errors.layer}
+                {...register('layer')}
+              />
 
               <Stack>
-                <Text fontWeight="bold">Selecione a camada</Text>
-                <Select
-                  borderColor="gray.900"
-                  bg="gray.900"
-                  size="lg"
-                  // placeholder="Selecione a camada"
-                  name="layer"
-                  _hover={{
-                    border: '2px',
-                    borderColor: 'pink.500',
-                  }}
-                  _focus={{
-                    bg: 'gray.800',
-                    border: '2px',
-                    borderColor: 'pink.500',
-                  }}
-                  // {...register("layer")}
-                >
-                  {arr.map((_, index) => (
-                    <option
-                      key={index + 1}
-                      style={{ backgroundColor: 'initial' }}
-                      value={index + 1}
+                {errors.explanation ? (
+                  <>
+                    <Button
+                      variant="outline"
+                      onClick={onOpen}
+                      colorScheme="red"
                     >
-                      {index + 1}
-                    </option>
-                  ))}
-                </Select>
-              </Stack>
+                      Adicionar explicação
+                    </Button>
+                  </>
+                ) : (
+                  <Button variant="outline" onClick={onOpen} colorScheme="pink">
+                    Adicionar explicação
+                  </Button>
+                )}
 
-              <Stack>
-                <Button onClick={onOpen} colorScheme="pink">Adicionar descrição</Button>
-                <Button disabled colorScheme="pink">
+                <Button
+                  type="submit"
+                  colorScheme="pink"
+                  isLoading={isSubmitting}
+                >
                   Criar tópico
                 </Button>
               </Stack>
-            </SimpleGrid>
 
-            <Modal
-              isCentered
-              onClose={onClose}
-              isOpen={isOpen}
-              motionPreset="slideInBottom"
-              size="6xl"
-            >
-              <ModalOverlay />
-              <ModalContent bg="gray.800">
-                <ModalHeader>Explicação do tópico</ModalHeader>
-                <ModalCloseButton />
-                <ModalBody>
-                  <Textarea rows={30}/>
-                </ModalBody>
-                <ModalFooter>
-                  <Button colorScheme="pink" mr={3} onClick={onClose}>
-                    Salvar
-                  </Button>
-                </ModalFooter>
-              </ModalContent>
-            </Modal>
+              <Modal
+                isCentered
+                onClose={onClose}
+                isOpen={isOpen}
+                motionPreset="slideInBottom"
+                size="6xl"
+              >
+                <ModalOverlay />
+                <ModalContent bg="gray.800">
+                  <ModalHeader>Explicação do tópico</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <Textarea {...register('explanation')} rows={30} />
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button colorScheme="pink" mr={3} onClick={onClose}>
+                      Salvar
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+            </SimpleGrid>
 
             <Image
               position="absolute"

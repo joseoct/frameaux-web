@@ -1,31 +1,30 @@
 import { useQuery } from "react-query";
 import { api } from "../../api";
 
-type User = {
+type Topic = {
   id: string;
   name: string;
+  layer: number;
+  explanation: string;
 }
 
-type UserTechnology = {
-  user: User;
+type Response = {
+  layerTopics: Topic[][];
+  maxLayer: number;
 }
 
-type TechnologiesResponse = {
-  id: string;
-  name: string;
-  technology_image: string;
-  UserTechnology: UserTechnology[];
-}
+async function getTopicsByTechnology(technologyId: string): Promise<Response> {
+  const { data } = await api.get<Topic[][]>(`/technologies/${technologyId}/topics`);
 
-async function getTopicsByTechnology(technologyId: string): Promise<TechnologiesResponse[]> {
-  const { data } = await api.get(`/technologies/${technologyId}/topics`);
+  console.log(data.length);
 
-  return data; 
+  return {
+    layerTopics: data,
+    maxLayer: data.length,
+  }; 
 }
 
 export function useGetTopics(technologyId: string) {
-  return useQuery(['technologies'], () => getTopicsByTechnology(technologyId), {
-    staleTime: 5000,
-  });
+  return useQuery(['topics', technologyId], () => getTopicsByTechnology(technologyId));
 }
 
