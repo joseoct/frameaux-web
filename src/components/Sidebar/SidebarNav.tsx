@@ -8,7 +8,7 @@ import { NavSection } from "./NavSection";
 export function SidebarNav() {
 
   return (
-    <Stack spacing="12" align="flex-start">
+    <Stack spacing="12" align="flex-start" bg="gray.800" p={4} w="260px">
       <NavSection title="GERAL">
         <Can roles={['administrator']}>
           <NavLink icon={RiDashboardLine} href="/dashboard">Dashboard</NavLink>

@@ -9,10 +9,7 @@ type Technology = {
 };
 
 async function getTechnologiesByUser(): Promise<Technology[]> {
-  const { data } = await api.get<Technology[]>(
-    '/user/technologies',
-    {},
-  );
+  const { data } = await api.get<Technology[]>('/user/technologies');
 
   return data;
 }
