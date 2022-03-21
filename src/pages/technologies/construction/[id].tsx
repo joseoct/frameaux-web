@@ -59,6 +59,8 @@ export default function TechnologiesConstruction({
 
   const { data } = useGetTopics(technology.id);
 
+  console.log(data?.layerTopics.map((item) => console.log(item)));
+
   const maxLayerArr = new Array(data?.maxLayer).fill(0);
 
   const createTopic = useCreateTopic();
@@ -116,7 +118,7 @@ export default function TechnologiesConstruction({
           >
             {data?.layerTopics.map((topics, index) => (
               <HStack spacing="6" key={index}>
-                {topics.map((topic) => (
+                {topics?.map((topic) => (
                   <TopicPopover key={topic.id} topic={topic}/>
                 ))}
               </HStack>
@@ -124,7 +126,7 @@ export default function TechnologiesConstruction({
           </Stack>
 
           <VStack
-            maxHeight="390px"
+            maxHeight="450px"
             position="relative"
             p="4"
             bg="gray.800"
@@ -141,9 +143,9 @@ export default function TechnologiesConstruction({
               Criação de Tópicos
             </Text>
 
-            <SimpleGrid
+            <Stack
+              direction="column"
               as="form"
-              minChildWidth="240px"
               spacing={['4', '8']}
               w="100%"
               onSubmit={handleSubmit(handleCreateTopic)}
@@ -210,7 +212,7 @@ export default function TechnologiesConstruction({
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-            </SimpleGrid>
+            </Stack>
 
             <Image
               position="absolute"
@@ -221,6 +223,9 @@ export default function TechnologiesConstruction({
               src={technology.technology_image}
               alt="Technology image"
             />
+            
+            <Text alignSelf="start" color="gray.500">*O máximo de tópicos por camada é 9</Text>
+
           </VStack>
         </Flex>
       </Flex>

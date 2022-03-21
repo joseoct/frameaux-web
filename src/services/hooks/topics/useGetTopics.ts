@@ -16,8 +16,6 @@ type Response = {
 async function getTopicsByTechnology(technologyId: string): Promise<Response> {
   const { data } = await api.get<Topic[][]>(`/technologies/${technologyId}/topics`);
 
-  console.log(data.length);
-
   return {
     layerTopics: data,
     maxLayer: data.length,
