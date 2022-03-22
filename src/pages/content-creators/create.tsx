@@ -5,10 +5,10 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router';
 
-import { Input } from '../../components/Form/Input';
-import { Header } from '../../components/Header';
-import { Sidebar } from '../../components/Sidebar';
-import { useCreateContentCreators } from '../../services/hooks/users/useCreateContentCreator';
+import { Input } from '@components/Form/Input';
+import { Header } from '@components/Header';
+import { Sidebar } from '@components/Sidebar';
+import { useCreateContentCreators } from '@services/hooks/users/useCreateContentCreator';
 
 type CreateUserFormData = {
   name: string;

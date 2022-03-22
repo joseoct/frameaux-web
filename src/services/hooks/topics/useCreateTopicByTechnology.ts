@@ -19,7 +19,7 @@ async function createTopic ({ topic, technology_id }: CreateTopicProps) {
   return response;
 }
 
-export function useCreateTopic () {
+export function useCreateTopicByTechnology () {
   return useMutation(createTopic, {
     onSuccess: () => {
       queryClient.invalidateQueries('topics');

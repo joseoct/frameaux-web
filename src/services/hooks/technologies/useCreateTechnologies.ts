@@ -11,14 +11,11 @@ type CreateTechnologyFormData = {
 
 async function createTechnology (technology: FormData) {
   const response = await api.post('content-creators-technologies', technology)
-  console.log(response);
 
   return response;
 }
 
 export function useCreateTechnologies () {
-  const toast = useToast();
-
   return useMutation(createTechnology, {
     onSuccess: () => {
       queryClient.invalidateQueries('technologies');

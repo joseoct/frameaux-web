@@ -17,6 +17,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
 
 type Topic = {
@@ -28,12 +29,14 @@ type Topic = {
 
 type PopoverTopicProps = {
   topic: Topic;
+  technology_id: string;
 }
 
-export function TopicPopover({ topic }: PopoverTopicProps) {
+export function TopicPopover({ topic, technology_id }: PopoverTopicProps) {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
+  const router = useRouter();
 
   return (
     <Popover>
@@ -61,8 +64,8 @@ export function TopicPopover({ topic }: PopoverTopicProps) {
         </PopoverHeader>
         <PopoverArrow bg="gray.800" />
         <Stack>
-          <Button size="lg" colorScheme="pink">
-            Ir para construção de níveis
+          <Button onClick={() => router.push(`/construction/technologies/${technology_id}/topics/${topic.id}/levels`)} size="lg" colorScheme="pink">
+            Ir para níveis
           </Button>
           <HStack>
             <Button w="100%" colorScheme="green">

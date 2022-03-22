@@ -10,7 +10,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  SimpleGrid,
   Stack,
   Text,
   Textarea,
@@ -19,18 +18,18 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { Input } from '../../../components/Form/Input';
-import { Select } from '../../../components/Form/Select';
-import { Header } from '../../../components/Header';
-import { TopicPopover } from '../../../components/Popover/TopicPopover';
-import { Sidebar } from '../../../components/Sidebar';
-import { api } from '../../../services/api';
-import { useCreateTopic } from '../../../services/hooks/topics/useCreateTopic';
-import { useGetTopics } from '../../../services/hooks/topics/useGetTopics';
+import { Input } from '@components/Form/Input';
+import { Select } from '@components/Form/Select';
+import { Header } from '@components/Header';
+import { TopicPopover } from '@components/Popover/TopicPopover';
+import { Sidebar } from '@components/Sidebar';
+import { api } from '@services/api';
+import { useCreateTopicByTechnology } from '@services/hooks/topics/useCreateTopicByTechnology';
+import { useGetTopicsByTechnology } from '@services/hooks/topics/useGetTopicsByTechnology';
 
 interface TechnologyProps {
   technology: {
@@ -52,18 +51,16 @@ const createTopicSchema = yup.object().shape({
   explanation: yup.string().required(),
 });
 
-export default function TechnologiesConstruction({
+export default function TechnologiesTopics({
   technology,
 }: TechnologyProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { data } = useGetTopics(technology.id);
-
-  console.log(data?.layerTopics.map((item) => console.log(item)));
+  const { data } = useGetTopicsByTechnology(technology.id);
 
   const maxLayerArr = new Array(data?.maxLayer).fill(0);
 
-  const createTopic = useCreateTopic();
+  const createTopic = useCreateTopicByTechnology();
   const toast = useToast();
 
   const {
@@ -119,7 +116,7 @@ export default function TechnologiesConstruction({
             {data?.layerTopics.map((topics, index) => (
               <HStack spacing="6" key={index}>
                 {topics?.map((topic) => (
-                  <TopicPopover key={topic.id} topic={topic}/>
+                  <TopicPopover key={topic.id} topic={topic} technology_id={technology.id}/>
                 ))}
               </HStack>
             ))}
@@ -233,26 +230,11 @@ export default function TechnologiesConstruction({
   );
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const { data } = await api.get('/technologies');
-
-  const paths = data.map((technology) => ({
-    params: {
-      id: technology.id,
-    },
-  }));
-
-  return {
-    paths,
-    fallback: false,
-  };
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const { id } = context.params;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { technologyId: id } = context.params;
   const { data } = await api.get(`/technologies/${id}`);
 
   return {
     props: { technology: data },
   };
-};
+}

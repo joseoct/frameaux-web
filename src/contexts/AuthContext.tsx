@@ -105,7 +105,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (user.role.name === 'administrator') {
         Router.push('/dashboard');
       } else {
-        Router.push('/technologies/construction');
+        Router.push('/construction/technologies');
       }
 
       // authChannel.postMessage('signIn');

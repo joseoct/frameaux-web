@@ -2,12 +2,12 @@ import NextLink from 'next/link';
 import { Link, Image, Text, useBreakpointValue } from "@chakra-ui/react";
 
 type TecnologyCardProps = {
-  id: string;
+  technologyId: string;
   title: string;
   src: string;
 }
 
-export function TecnologyCard({ id, title, src }: TecnologyCardProps) {
+export function TecnologyCard({ technologyId, title, src }: TecnologyCardProps) {
   const isMd = useBreakpointValue({
     base: false,
     md: true,
@@ -18,12 +18,12 @@ export function TecnologyCard({ id, title, src }: TecnologyCardProps) {
     <NextLink 
       passHref 
       href={{
-        pathname: '/technologies/construction/[id]',
+        pathname: '/construction/technologies/[technologyId]/topics',
         query: {
-          id,
+          technologyId,
         }
       }}
-      as={`/technologies/construction/${id}`}
+      as={`/construction/technologies/${technologyId}/topics`}
     >
       <Link
         display="flex"

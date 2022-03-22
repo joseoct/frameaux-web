@@ -16,7 +16,7 @@ export function SidebarNav() {
           <NavLink icon={RiComputerLine} href="/technologies">Tecnologias</NavLink>
         </Can>
         <Can roles={['content_creator']}>
-          <NavLink icon={RiComputerLine} href="/technologies/construction">Tecnologias responsáveis</NavLink>
+          <NavLink icon={RiComputerLine} href="/construction/technologies">Tecnologias responsáveis</NavLink>
         </Can>
       </NavSection>
     </Stack>

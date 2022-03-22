@@ -2,9 +2,9 @@ import {
   Box, Flex
 } from '@chakra-ui/react';
 
-import ContentCreatorsTable from '../../components/ContentCreatorsTable';
-import { Header } from '../../components/Header';
-import { Sidebar } from '../../components/Sidebar';
+import ContentCreatorsTable from '@components/ContentCreatorsTable';
+import { Header } from '@components/Header';
+import { Sidebar } from '@components/Sidebar';
 
 export default function ContentCreators() {
   return (

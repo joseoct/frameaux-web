@@ -22,7 +22,7 @@ async function getTopicsByTechnology(technologyId: string): Promise<Response> {
   }; 
 }
 
-export function useGetTopics(technologyId: string) {
+export function useGetTopicsByTechnology(technologyId: string) {
   return useQuery(['topics', technologyId], () => getTopicsByTechnology(technologyId));
 }
 

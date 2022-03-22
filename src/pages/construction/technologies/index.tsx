@@ -1,13 +1,13 @@
 import { Flex, SimpleGrid } from '@chakra-ui/react';
 import Head from 'next/head';
 
-import { Header } from '../../../components/Header';
-import { Sidebar } from '../../../components/Sidebar';
-import { TecnologyCard } from '../../../components/TecnologyCard';
+import { Header } from '@components/Header';
+import { Sidebar } from '@components/Sidebar';
+import { TecnologyCard } from '@components/TecnologyCard';
 
-import { useGetTechnologiesByUser } from '../../../services/hooks/technologies/useGetTechnologiesByUser';
+import { useGetTechnologiesByUser } from '@services/hooks/technologies/useGetTechnologiesByUser';
 
-import { withSSRAuth } from '../../../utils/withSSRAuth';
+import { withSSRAuth } from '@utils/withSSRAuth';
 
 export default function TechnologiesConstruction() {
   const { data: technologies, isLoading } =
@@ -28,7 +28,7 @@ export default function TechnologiesConstruction() {
             {technologies?.map((technology) => (
               <TecnologyCard
                 key={technology.id}
-                id={technology.id}
+                technologyId={technology.id}
                 title={technology.name}
                 src={technology.technology_image}
               />

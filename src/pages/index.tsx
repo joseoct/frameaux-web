@@ -6,11 +6,11 @@ import * as yup from 'yup';
 
 import { useInterval } from 'usehooks-ts';
 
-import { Input } from '../components/Form/Input';
-import { Logo } from '../components/Header/Logo';
+import { Input } from '@components/Form/Input';
+import { Logo } from '@components/Header/Logo';
 
-import { AuthContext } from '../contexts/AuthContext';
-import { withSSRGuest } from '../utils/withSSRGuest';
+import { AuthContext } from '@contexts/AuthContext';
+import { withSSRGuest } from '@utils/withSSRGuest';
 
 type AbbreviationTechnologies = {
   abbreviation: string;

@@ -1,11 +1,11 @@
 import { Box, Flex, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import { Header } from '../components/Header';
-import { Sidebar } from '../components/Sidebar';
-import { withSSRAuth } from '../utils/withSSRAuth';
+import { Header } from '@components/Header';
+import { Sidebar } from '@components/Sidebar';
+import { withSSRAuth } from '@utils/withSSRAuth';
 
-import { useGetTotals } from '../services/hooks/dashboard/useGetTotals';
+import { useGetTotals } from '@services/hooks/dashboard/useGetTotals';
 
 export default function Dashboard() {
   const { data, isLoading } = useGetTotals();
