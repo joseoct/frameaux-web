@@ -17,6 +17,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { useDeleteTopicByTechnology } from '@services/hooks/topics/useDeleteTopicByTechnology copy';
 import { useRouter } from 'next/router';
 import { useRef } from 'react';
 
@@ -37,6 +38,17 @@ export function TopicPopover({ topic, technology_id }: PopoverTopicProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
   const router = useRouter();
+
+  const deleteTopic = useDeleteTopicByTechnology();
+
+  const handleDeleteTopic = () => {
+    deleteTopic.mutateAsync({
+      topic_id: topic.id,
+      technology_id,
+    });
+
+    onClose();
+  }
 
   return (
     <Popover>
@@ -96,7 +108,7 @@ export function TopicPopover({ topic, technology_id }: PopoverTopicProps) {
                     <Button color="black" ref={cancelRef} onClick={onClose}>
                       Cancel
                     </Button>
-                    <Button colorScheme="red" onClick={onClose} ml={3}>
+                    <Button colorScheme="red" onClick={() => handleDeleteTopic()} ml={3}>
                       Deletar
                     </Button>
                   </AlertDialogFooter>

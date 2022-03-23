@@ -1,5 +1,6 @@
 import {
   Button,
+  Divider,
   Flex,
   HStack,
   Image,
@@ -137,7 +138,8 @@ export default function TechnologiesTopics({
               fontWeight="bold"
               color="white"
             >
-              Criação de Tópicos
+                Criação de tópicos de
+                <Text color="purple.400">{technology.name}</Text>
             </Text>
 
             <Stack
