@@ -20,7 +20,7 @@ export default function Dashboard() {
 
         <SimpleGrid flex="1" gap="4" minChildWidth="320px" align-items="flex">
           
-          {data.totals.map((total, index) => (
+          {data?.totals.map((total, index) => (
             <TotalCard key={index} isLoading={isLoading} total={total}/>
           ))}
           

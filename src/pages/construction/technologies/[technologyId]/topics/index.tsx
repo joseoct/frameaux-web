@@ -2,8 +2,8 @@ import {
   Button,
   Divider,
   Flex,
-  HStack,
   Image,
+  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -117,7 +117,11 @@ export default function TechnologiesTopics({
             {data?.layerTopics.map((topics, index) => (
               <HStack spacing="6" key={index}>
                 {topics?.map((topic) => (
-                  <TopicPopover key={topic.id} topic={topic} technology_id={technology.id}/>
+                  <TopicPopover
+                    key={topic.id}
+                    topic={topic}
+                    technology_id={technology.id}
+                  />
                 ))}
               </HStack>
             ))}
@@ -131,16 +135,27 @@ export default function TechnologiesTopics({
             ml="8"
             spacing="4"
           >
-            <Text
-              w="320px"
-              textAlign="center"
-              fontSize="xl"
-              fontWeight="bold"
-              color="white"
-            >
+            <Stack>
+              <Text
+                w="320px"
+                textAlign="center"
+                fontSize=""
+                fontWeight="bold"
+                color="white"
+              >
                 Criação de tópicos de
-                <Text color="purple.400">{technology.name}</Text>
-            </Text>
+              </Text>
+              <Text
+                w="320px"
+                textAlign="center"
+                fontSize="2xl"
+                fontWeight="bold"
+                color="purple.400"
+              >
+                {technology.name}
+              </Text>
+              {/* <Text color="purple.400">{technology.name}</Text> */}
+            </Stack>
 
             <Stack
               direction="column"
@@ -176,7 +191,11 @@ export default function TechnologiesTopics({
                     </Button>
                   </>
                 ) : (
-                  <Button variant="outline" onClick={onOpen} colorScheme="purple">
+                  <Button
+                    variant="outline"
+                    onClick={onOpen}
+                    colorScheme="purple"
+                  >
                     Adicionar explicação
                   </Button>
                 )}
@@ -222,9 +241,10 @@ export default function TechnologiesTopics({
               src={technology.technology_image}
               alt="Technology image"
             />
-            
-            <Text alignSelf="start" color="gray.500">*O máximo de tópicos por camada é 9</Text>
 
+            <Text alignSelf="start" color="gray.500">
+              *O máximo de tópicos por camada é 9
+            </Text>
           </VStack>
         </Flex>
       </Flex>

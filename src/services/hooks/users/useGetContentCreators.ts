@@ -28,7 +28,6 @@ async function getContentCreators(page: number): Promise<GetContentCreatorsRespo
       page: page,
     }
   })
-  console.log(data);
 
   const totalCount = Number(headers['x-total-count']);
 
