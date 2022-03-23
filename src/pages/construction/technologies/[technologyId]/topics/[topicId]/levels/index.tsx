@@ -27,9 +27,9 @@ export default function TechnologiesConstruction({ topic, technology }) {
           <Stack w="100%" direction="column" spacing="4">
             <HStack>
               <Heading>Níveis do tópico
-                <Text as="span" color="pink.400"> {topic.name} </Text> 
+                <Text as="span" color="purple.400"> {topic.name} </Text> 
                 da tecnologia 
-                <Text as="span" color="pink.400"> {technology.name} </Text>
+                <Text as="span" color="purple.400"> {technology.name} </Text>
               </Heading>
               <Image w="40px" h="40px" src={technology.technology_image} alt="Imagem da tecnologia"></Image>
             </HStack>
@@ -42,7 +42,7 @@ export default function TechnologiesConstruction({ topic, technology }) {
                       {level.difficulty}
                     </Text>
                   </HStack>
-                  <Button colorScheme="pink" size="lg" mt="2">
+                  <Button colorScheme="purple" size="lg" mt="2">
                     <Text fontSize="lg" fontWeight="bold">
                       Cadastrar exercícios para este nível
                     </Text>

@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Image,
   Table,
   Tbody,
   Td,
@@ -15,8 +16,7 @@ import {
   useBreakpointValue,
   Spinner,
   Link
-} from '@chakra-ui/react';
-import NextLink from 'next/link';
+} from '@chakra-ui/react'; import NextLink from 'next/link';
 import { useState, Dispatch, SetStateAction } from 'react';
 import { RiAddLine } from 'react-icons/ri';
 
@@ -70,7 +70,7 @@ export default function ContentCreatorsTable({
               as="a"
               size="sm"
               fontSize="sm"
-              colorScheme="pink"
+              colorScheme="purple"
               leftIcon={<Icon as={RiAddLine}></Icon>}
             >
               Cadastrar novo criador de conteúdo
@@ -107,14 +107,14 @@ export default function ContentCreatorsTable({
                       <Checkbox
                         onChange={() => handleCheckboxChanged(contentCreator.id)}
                         isChecked={contentCreatorsIds?.includes(contentCreator.id)}
-                        colorScheme="pink"
+                        colorScheme="purple"
                       />
                     </Td>
                   )}
                   <Td>
                     <Box>
                       <Link
-                        color="purple.400"
+                        color="purple.200"
                       >
                         <Text fontWeight="bold">{contentCreator.name}</Text>
                       </Link>
@@ -123,15 +123,13 @@ export default function ContentCreatorsTable({
                       </Text>
                     </Box>
                   </Td>
-                  {isLg && (
                     <Td>
                       {contentCreator.UserTechnology?.map((userTechnology) => (
-                        <Text key={userTechnology.technology.id}>
+                        <Text color="purple.200" key={userTechnology.technology.id}>
                           {userTechnology.technology.name}
                         </Text>
                       ))}
                     </Td>
-                  )}
                 </Tr>
               ))}
             </Tbody>

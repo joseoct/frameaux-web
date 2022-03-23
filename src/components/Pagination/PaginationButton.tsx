@@ -17,10 +17,10 @@ export function PaginationButton({
         size="sm"
         fontSize="xs"
         width="4"
-        colorScheme="pink"
+        colorScheme="purple"
         disabled
         _disabled={{
-          bg: 'pink.500',
+          bg: 'purple.500',
           cursor: 'default',
         }}
       >

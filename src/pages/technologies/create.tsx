@@ -163,7 +163,7 @@ export default function CreateTechnology() {
                       w="180px"
                       h="180px"
                       border="1px"
-                      borderColor="pink.400"
+                      borderColor="purple.400"
                     >
                       {imageList.length > 0 ? (
                         <Image
@@ -181,14 +181,14 @@ export default function CreateTechnology() {
                     {imageList.length > 0 && (
                       <HStack>
                         <Button
-                          colorScheme="pink"
+                          colorScheme="purple"
                           onClick={() => onImageUpdate(0)}
                         >
                           Alterar
                         </Button>
 
                         <Button
-                          colorScheme="pink"
+                          colorScheme="purple"
                           onClick={() => onImageRemove(0)}
                         >
                           Remover
@@ -214,7 +214,7 @@ export default function CreateTechnology() {
               <Link href="/technologies" passHref>
                 <Button colorScheme="whiteAlpha">Cancelar</Button>
               </Link>
-              <Button type="submit" colorScheme="pink" isLoading={isSubmitting}>
+              <Button type="submit" colorScheme="purple" isLoading={isSubmitting}>
                 Salvar
               </Button>
             </HStack>

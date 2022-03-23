@@ -1,4 +1,4 @@
-import { Box, Flex, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
+import { Box, Flex, SimpleGrid, Spinner, Text, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 
 import { Header } from '@components/Header';
@@ -6,6 +6,7 @@ import { Sidebar } from '@components/Sidebar';
 import { withSSRAuth } from '@utils/withSSRAuth';
 
 import { useGetTotals } from '@services/hooks/dashboard/useGetTotals';
+import TotalCard from '@components/TotalCard';
 
 export default function Dashboard() {
   const { data, isLoading } = useGetTotals();
@@ -18,63 +19,11 @@ export default function Dashboard() {
         <Sidebar />
 
         <SimpleGrid flex="1" gap="4" minChildWidth="320px" align-items="flex">
-          <Flex
-            alignItems="center"
-            flexDirection="column"
-            p={['6', '8']}
-            bg="gray.800"
-            borderRadius="8"
-            pb="4"
-          >
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <>
-                <Text fontSize="large">Criadores de Conteúdo</Text>
-                <Text fontSize="5xl">
-                  {data.totalContentCreators}
-                </Text>
-              </>
-            )}
-          </Flex>
-          <Flex
-            alignItems="center"
-            flexDirection="column"
-            p={['6', '8']}
-            bg="gray.800"
-            borderRadius="8"
-            pb="4"
-          >
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <>
-                <Text fontSize="large">Estudantes</Text>
-                <Text fontSize="5xl">
-                  {data.totalStudents}
-                </Text>
-              </>
-            )}
-          </Flex>
-          <Flex
-            alignItems="center"
-            flexDirection="column"
-            p={['6', '8']}
-            bg="gray.800"
-            borderRadius="8"
-            pb="4"
-          >
-            {isLoading ? (
-              <Spinner />
-            ) : (
-              <>
-                <Text fontSize="large">Tecnologias</Text>
-                <Text fontSize="5xl">
-                  {data.totalTechnologies}
-                </Text>
-              </>
-            )}
-          </Flex>
+          
+          {data.totals.map((total, index) => (
+            <TotalCard key={index} isLoading={isLoading} total={total}/>
+          ))}
+          
         </SimpleGrid>
       </Flex>
     </Flex>

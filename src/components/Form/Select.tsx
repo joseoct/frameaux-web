@@ -31,12 +31,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           // placeholder="Selecione a camada"
           _hover={{
             border: '2px',
-            borderColor: 'pink.500',
+            borderColor: 'purple.500',
           }}
           _focus={{
             bg: 'gray.800',
             border: '2px',
-            borderColor: 'pink.500',
+            borderColor: 'purple.500',
           }}
           ref={ref}
           {...rest}

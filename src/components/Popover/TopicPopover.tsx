@@ -52,7 +52,7 @@ export function TopicPopover({ topic, technology_id }: PopoverTopicProps) {
           transition="0.2s"
           border='3px solid #1F2029'
           _hover={{
-            borderColor: 'pink.500',
+            borderColor: 'purple.500',
           }}
         >
           <Text fontSize="sm">{topic.layer}</Text>
@@ -64,7 +64,7 @@ export function TopicPopover({ topic, technology_id }: PopoverTopicProps) {
         </PopoverHeader>
         <PopoverArrow bg="gray.800" />
         <Stack>
-          <Button onClick={() => router.push(`/construction/technologies/${technology_id}/topics/${topic.id}/levels`)} size="lg" colorScheme="pink">
+          <Button onClick={() => router.push(`/construction/technologies/${technology_id}/topics/${topic.id}/levels`)} size="lg" colorScheme="purple">
             Ir para níveis
           </Button>
           <HStack>
@@ -84,7 +84,7 @@ export function TopicPopover({ topic, technology_id }: PopoverTopicProps) {
                   <AlertDialogHeader fontSize="lg" fontWeight="bold">
                     <HStack>
                       <Text>Deletar o tópico:</Text>
-                      <Text color="pink.400">{topic.name}</Text>
+                      <Text color="purple.400">{topic.name}</Text>
                     </HStack>
                   </AlertDialogHeader>
 

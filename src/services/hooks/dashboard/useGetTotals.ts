@@ -2,13 +2,14 @@ import { useQuery } from "react-query";
 import { api } from "../../api";
 
 type TotalsResponse = {
-  totalContentCreators: number;
-  totalStudents: number;
-  totalTechnologies: number;
+  totals: {
+    label: string;
+    total: number;
+  }[];
 }
 
 async function getTotals(): Promise<TotalsResponse> {
-  const { data } = await api.get('/dashboard')
+  const { data } = await api.get<TotalsResponse>('/dashboard')
 
   return data; 
 }

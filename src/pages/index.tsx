@@ -109,7 +109,7 @@ export default function Home() {
           <Button
             type="submit"
             mt="6"
-            colorScheme="pink"
+            colorScheme="purple"
             size="lg"
             isLoading={isSubmitting}
           >

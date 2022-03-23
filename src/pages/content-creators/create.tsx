@@ -123,7 +123,7 @@ export default function CreateContentCreator() {
               <Link href="/users" passHref>
                 <Button colorScheme="whiteAlpha">Cancelar</Button>
               </Link>
-              <Button type="submit" colorScheme="pink" isLoading={isSubmitting}>
+              <Button type="submit" colorScheme="purple" isLoading={isSubmitting}>
                 Cadastrar
               </Button>
             </HStack>

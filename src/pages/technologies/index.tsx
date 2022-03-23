@@ -60,7 +60,7 @@ export default function Technologies() {
                   as="a"
                   size="sm"
                   fontSize="sm"
-                  colorScheme="pink"
+                  colorScheme="purple"
                   leftIcon={<Icon as={RiAddLine}></Icon>}
                 >
                   Cadastrar nova tecnologia
@@ -96,7 +96,7 @@ export default function Technologies() {
                               src={technology.technology_image}
                               alt={technology.technology_image}
                             />
-                            <Link color="purple.400">
+                            <Link color="purple.200">
                               <Text fontWeight="bold">{technology.name}</Text>
                             </Link>
                           </HStack>
@@ -104,7 +104,7 @@ export default function Technologies() {
                         {isLg && (
                           <Td>
                             {technology.UserTechnology.map((userTechnology) => (
-                              <Text key={userTechnology.user.id}>
+                              <Text color="purple.200" key={userTechnology.user.id}>
                                 {userTechnology.user.name}
                               </Text>
                             ))}

@@ -11,7 +11,7 @@ export function Logo () {
         letterSpacing="tight"
       >
         frame
-        <Text as="span" color="pink.400">
+        <Text as="span" color="purple.400">
           aux
         </Text>
       </Text>

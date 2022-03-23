@@ -174,14 +174,14 @@ export default function TechnologiesTopics({
                     </Button>
                   </>
                 ) : (
-                  <Button variant="outline" onClick={onOpen} colorScheme="pink">
+                  <Button variant="outline" onClick={onOpen} colorScheme="purple">
                     Adicionar explicação
                   </Button>
                 )}
 
                 <Button
                   type="submit"
-                  colorScheme="pink"
+                  colorScheme="purple"
                   isLoading={isSubmitting}
                 >
                   Criar tópico
@@ -203,7 +203,7 @@ export default function TechnologiesTopics({
                     <Textarea {...register('explanation')} rows={30} />
                   </ModalBody>
                   <ModalFooter>
-                    <Button colorScheme="pink" mr={3} onClick={onClose}>
+                    <Button colorScheme="purple" mr={3} onClick={onClose}>
                       Salvar
                     </Button>
                   </ModalFooter>
