@@ -7,9 +7,9 @@ type DeleteTopicProps = {
   topic_id: string;
 }
 
-async function deleteTopic ({ topic_id, technology_id }: DeleteTopicProps) {
+async function deleteTopic ({ topic_id }: DeleteTopicProps) {
   const response = await api.delete(
-    `/technologies/${technology_id}/topics/${topic_id}`,
+    `/topics/${topic_id}`,
   );
 
   return response;
