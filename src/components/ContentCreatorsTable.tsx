@@ -96,7 +96,7 @@ export default function ContentCreatorsTable({
                   <Th px={['2', '4', '6']} color="gray.300" width="8"></Th>
                 )}
                 <Th>Usuário</Th>
-                {isLg && <Th>Tecnologias</Th>}
+                <Th>Tecnologias</Th>
               </Tr>
             </Thead>
             <Tbody>

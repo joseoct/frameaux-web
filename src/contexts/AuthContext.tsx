@@ -32,9 +32,16 @@ export const AuthContext = createContext({} as AuthContextData);
 let authChannel: BroadcastChannel;
 
 export function signOut() {
-  destroyCookie(undefined, 'fa.to');
+  try {
+    destroyCookie(null, 'fa.to', {
+      path: '/',
+    });
 
-  Router.push('/');
+    Router.push('/');
+  } catch (error) {
+    console.log(error);
+  }
+
 
   // authChannel.postMessage('signOut');
 }
@@ -88,7 +95,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       const { token, user } = response.data;
 
-      setCookie(undefined, 'fa.to', token, {
+      setCookie(null, 'fa.to', token, {
         maxAge: 60 * 60 * 24 * 7, // 30 days
         path: '/',
       });

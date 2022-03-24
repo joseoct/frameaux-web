@@ -14,8 +14,8 @@ export function ActiveLink({ children, ...rest } : ActiveLinkProps) {
     <Link {...rest}>
       {cloneElement(children, {
         color: asPath.startsWith(rest.href.toString())
-          ? 'purple.500'
-          : 'gray.500',
+          ? 'purple.400'
+          : 'gray.400',
       })}
     </Link>
   );
