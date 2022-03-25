@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormErrorMessage,
 } from '@chakra-ui/react';
-import { forwardRef } from 'react';
+import { Dispatch, forwardRef, SetStateAction } from 'react';
 import { FieldError } from 'react-hook-form'
 
 interface SelectProps extends ChakraSelectProps {
@@ -19,9 +19,11 @@ interface SelectProps extends ChakraSelectProps {
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ name, label, error = null, maxLayer, ...rest }: SelectProps, ref) => {
+
     return (
       <FormControl isInvalid={!!error}>
         {!!label && <FormLabel>{label}</FormLabel>}
+        <Text></Text>
 
         <ChakraSelect
           name={name}
@@ -52,7 +54,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           ))}
         </ChakraSelect>
 
-        {!!error && <FormErrorMessage>{error.message}</FormErrorMessage> }
+        {!!error && <FormErrorMessage>{error.message}</FormErrorMessage>}
       </FormControl>
     );
   },

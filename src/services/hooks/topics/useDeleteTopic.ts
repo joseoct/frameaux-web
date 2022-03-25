@@ -15,7 +15,7 @@ async function deleteTopic ({ topic_id }: DeleteTopicProps) {
   return response;
 }
 
-export function useDeleteTopicByTechnology () {
+export function useDeleteTopic () {
   return useMutation(deleteTopic, {
     onSuccess: () => {
       queryClient.invalidateQueries('topics');

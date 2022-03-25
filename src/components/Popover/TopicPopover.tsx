@@ -17,9 +17,9 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useDeleteTopicByTechnology } from '@services/hooks/topics/useDeleteTopicByTechnology copy';
+import { useDeleteTopic } from '@services/hooks/topics/useDeleteTopic';
 import { useRouter } from 'next/router';
-import { useRef } from 'react';
+import { Dispatch, SetStateAction, useRef } from 'react';
 
 type Topic = {
   id: string;
@@ -31,15 +31,16 @@ type Topic = {
 type PopoverTopicProps = {
   topic: Topic;
   technology_id: string;
+  setTopic: Dispatch<SetStateAction<Topic | undefined>>;
 }
 
-export function TopicPopover({ topic, technology_id }: PopoverTopicProps) {
+export function TopicPopover({ topic, technology_id, setTopic }: PopoverTopicProps) {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = useRef()
   const router = useRouter();
 
-  const deleteTopic = useDeleteTopicByTechnology();
+  const deleteTopic = useDeleteTopic();
 
   const handleDeleteTopic = () => {
     deleteTopic.mutateAsync({
@@ -58,16 +59,17 @@ export function TopicPopover({ topic, technology_id }: PopoverTopicProps) {
           justifyContent="center"
           alignItems="center"
           bg="gray.800"
-          boxSize="90px"
+          boxSize="110px"
           borderRadius="50%"
           cursor="pointer"
           transition="0.2s"
           border='3px solid #1F2029'
+          p="8px"
           _hover={{
             borderColor: 'purple.500',
           }}
         >
-          <Text fontSize="sm">{topic.layer}</Text>
+          <Text align="center" fontWeight="bold" fontSize="sm">{topic.name}</Text>
         </Flex>
       </PopoverTrigger>
       <PopoverContent bg="gray.800" p="16px">
@@ -80,7 +82,7 @@ export function TopicPopover({ topic, technology_id }: PopoverTopicProps) {
             Ir para níveis
           </Button>
           <HStack>
-            <Button w="100%" colorScheme="green">
+            <Button onClick={() => setTopic(topic)} w="100%" colorScheme="green">
               Editar
             </Button>
             <Button onClick={onOpen} w="100%" colorScheme="red">

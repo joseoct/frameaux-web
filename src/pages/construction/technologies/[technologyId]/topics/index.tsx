@@ -19,7 +19,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -30,7 +30,9 @@ import { TopicPopover } from '@components/Popover/TopicPopover';
 import { Sidebar } from '@components/Sidebar';
 import { api } from '@services/api';
 import { useCreateTopicByTechnology } from '@services/hooks/topics/useCreateTopicByTechnology';
+import { useUpdateTopic } from '@services/hooks/topics/useUpdateTopic';
 import { useGetTopicsByTechnology } from '@services/hooks/topics/useGetTopicsByTechnology';
+import { useEffect, useState } from 'react';
 
 interface TechnologyProps {
   technology: {
@@ -38,6 +40,13 @@ interface TechnologyProps {
     name: string;
     technology_image: string;
   };
+}
+
+type Topic = {
+  id: string;
+  name: string;
+  layer: number;
+  explanation: string;
 }
 
 type CreateTopicFormData = {
@@ -52,48 +61,73 @@ const createTopicSchema = yup.object().shape({
   explanation: yup.string().required(),
 });
 
+
 export default function TechnologiesTopics({
   technology,
 }: TechnologyProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [topic, setTopic] = useState<Topic>(null);
+  const [maxLayer, setMaxLayer] = useState<number[]>([]);
 
   const { data } = useGetTopicsByTechnology(technology.id);
 
-  const maxLayerArr = new Array(data?.maxLayer).fill(0);
-
   const createTopic = useCreateTopicByTechnology();
+  const updateTopic = useUpdateTopic();
+
+  useEffect(() => {
+    const maxLayerArr = new Array(data?.maxLayer).fill(0);
+
+    setMaxLayer(maxLayerArr);
+  }, [data?.maxLayer])
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    setValue,
     reset,
   } = useForm({
     resolver: yupResolver(createTopicSchema),
   });
+
+  useEffect(() => {
+    setValue('name', topic?.name);
+    setValue('layer', Math.floor(topic?.layer));
+    setValue('explanation', topic?.explanation);
+  }, [topic, setValue]);
 
   const handleCreateTopic: SubmitHandler<CreateTopicFormData> = async (
     values,
   ) => {
     
     try {
-      await createTopic.mutateAsync({
-        topic: values,
-        technology_id: technology.id,
-      });
+      if (topic) {
+        await updateTopic.mutateAsync({
+          topic_id: topic.id,
+          topic: {
+            ...values,
+          }
+        });
+        setTopic(null);
+      } else {
+        await createTopic.mutateAsync({
+          topic: values,
+          technology_id: technology.id,
+        });
+      }
 
       reset();
     } catch (error) {
       toast({
         title: 'Error',
-        description: 'Erro ao cadastrar tópico',
+        description: error.response.data.error,
         status: 'error',
         duration: 9000,
         isClosable: true,
       });
     }
-
   };
 
   return (
@@ -121,6 +155,7 @@ export default function TechnologiesTopics({
                     key={topic.id}
                     topic={topic}
                     technology_id={technology.id}
+                    setTopic={setTopic}
                   />
                 ))}
               </HStack>
@@ -128,23 +163,36 @@ export default function TechnologiesTopics({
           </Stack>
 
           <VStack
-            maxHeight="450px"
+            maxHeight="445px"
             position="relative"
             p="4"
             bg="gray.800"
+            border={topic ? '2px solid #48BB78' : '1px solid #1F2029'}
             ml="8"
             spacing="4"
           >
             <Stack>
-              <Text
-                w="320px"
-                textAlign="center"
-                fontSize=""
-                fontWeight="bold"
-                color="white"
-              >
-                Criação de tópicos de
-              </Text>
+              {topic ? (
+                <Text
+                  w="320px"
+                  textAlign="center"
+                  fontSize=""
+                  fontWeight="bold"
+                  color="white"
+                >
+                  Edição do tópico {topic.name}
+                </Text>
+              ) : (
+                <Text
+                  w="320px"
+                  textAlign="center"
+                  fontSize=""
+                  fontWeight="bold"
+                  color="white"
+                >
+                  Criação de tópicos
+                </Text>
+              )}
               <Text
                 w="320px"
                 textAlign="center"
@@ -154,96 +202,111 @@ export default function TechnologiesTopics({
               >
                 {technology.name}
               </Text>
-              {/* <Text color="purple.400">{technology.name}</Text> */}
-            </Stack>
 
-            <Stack
-              direction="column"
-              as="form"
-              spacing={['4', '8']}
-              w="100%"
-              onSubmit={handleSubmit(handleCreateTopic)}
-            >
-              <Input
-                name="name"
-                label="Nome"
-                type="text"
-                error={errors.name}
-                {...register('name')}
-              />
+              <Stack
+                direction="column"
+                as="form"
+                spacing={['4', '8']}
+                w="100%"
+                onSubmit={handleSubmit(handleCreateTopic)}
+              >
+                <Input
+                  name="name"
+                  label="Nome"
+                  type="text"
+                  error={errors.name}
+                  {...register('name')}
+                />
 
-              <Select
-                label="Camada"
-                maxLayer={maxLayerArr}
-                error={errors.layer}
-                {...register('layer')}
-              />
+                <Select
+                  label="Camada"
+                  maxLayer={maxLayer}
+                  error={errors.layer}
+                  {...register('layer')}
+                />
 
-              <Stack>
-                {errors.explanation ? (
-                  <>
+                <Stack>
+                  {errors.explanation ? (
+                    <>
+                      <Button
+                        variant="outline"
+                        onClick={onOpen}
+                        colorScheme="red"
+                      >
+                        {topic ? 'Editar explicação' : 'Criar explicação'}
+                      </Button>
+                    </>
+                  ) : (
                     <Button
                       variant="outline"
                       onClick={onOpen}
-                      colorScheme="red"
+                      colorScheme="purple"
                     >
-                      Adicionar explicação
+                      {topic ? 'Editar explicação' : 'Criar explicação'}
                     </Button>
-                  </>
-                ) : (
-                  <Button
-                    variant="outline"
-                    onClick={onOpen}
-                    colorScheme="purple"
-                  >
-                    Adicionar explicação
-                  </Button>
-                )}
+                  )}
 
-                <Button
-                  type="submit"
-                  colorScheme="purple"
-                  isLoading={isSubmitting}
+                  <HStack>
+                    {topic && (
+                      <Button
+                        type="submit"
+                        color="gray.800"
+                        colorScheme="gray"
+                        onClickCapture={() => setTopic(null)}
+                      >
+                        Cancelar
+                      </Button>
+                    )}
+
+                    <Button
+                      type="submit"
+                      colorScheme="purple"
+                      isLoading={isSubmitting}
+                      w="100%"
+                    >
+                      {topic ? 'Editar' : 'Criar'}
+                    </Button>
+                  </HStack>
+                </Stack>
+
+                <Modal
+                  isCentered
+                  onClose={onClose}
+                  isOpen={isOpen}
+                  motionPreset="slideInBottom"
+                  size="6xl"
                 >
-                  Criar tópico
-                </Button>
+                  <ModalOverlay />
+                  <ModalContent bg="gray.800">
+                    <ModalHeader>Explicação do tópico</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <Textarea
+                        {...register('explanation')}
+                        rows={30}
+                      />
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button colorScheme="purple" mr={3} onClick={onClose}>
+                        Salvar
+                      </Button>
+                    </ModalFooter>
+                  </ModalContent>
+                </Modal>
               </Stack>
 
-              <Modal
-                isCentered
-                onClose={onClose}
-                isOpen={isOpen}
-                motionPreset="slideInBottom"
-                size="6xl"
-              >
-                <ModalOverlay />
-                <ModalContent bg="gray.800">
-                  <ModalHeader>Explicação do tópico</ModalHeader>
-                  <ModalCloseButton />
-                  <ModalBody>
-                    <Textarea {...register('explanation')} rows={30} />
-                  </ModalBody>
-                  <ModalFooter>
-                    <Button colorScheme="purple" mr={3} onClick={onClose}>
-                      Salvar
-                    </Button>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
+              <Image
+                position="absolute"
+                top="4"
+                left="4"
+                boxSize="32px"
+                objectFit="cover"
+                src={technology.technology_image}
+                alt="Technology image"
+              />
             </Stack>
-
-            <Image
-              position="absolute"
-              top="0"
-              left="3"
-              boxSize="32px"
-              objectFit="cover"
-              src={technology.technology_image}
-              alt="Technology image"
-            />
-
             <Text alignSelf="start" color="gray.500">
-              *O máximo de tópicos por camada é 9
+              *O máximo de tópicos por camada é 3
             </Text>
           </VStack>
         </Flex>
