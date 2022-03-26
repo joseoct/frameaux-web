@@ -1,9 +1,17 @@
 import { useQuery } from "react-query";
 import { api } from "../../api";
 
+type Exercise = {
+  id: string;
+  question: string;
+  level_id: string;
+  type: string;
+}
+
 type Level = {
   id: string;
   difficulty: number;
+  Exercise: Exercise[];
 }
 
 type Response = {

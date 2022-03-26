@@ -13,6 +13,8 @@ export default function TechnologiesConstruction({ topic, technology }) {
 
   const { data } = useGetLevelsByTopics(topic.id);
 
+  console.log(data);
+
   return (
     <>
       <Head>
@@ -26,22 +28,59 @@ export default function TechnologiesConstruction({ topic, technology }) {
 
           <Stack w="100%" direction="column" spacing="4">
             <HStack>
-              <Heading>Níveis do tópico
-                <Text as="span" color="purple.400"> {topic.name} </Text> 
-                da tecnologia 
-                <Text as="span" color="purple.400"> {technology.name} </Text>
+              <Heading>
+                Níveis do tópico
+                <Text as="span" color="purple.400">
+                  {' '}
+                  {topic.name}{' '}
+                </Text>
+                da tecnologia
+                <Text as="span" color="purple.400">
+                  {' '}
+                  {technology.name}{' '}
+                </Text>
               </Heading>
-              <Image w="40px" h="40px" src={technology.technology_image} alt="Imagem da tecnologia"></Image>
+              <Image
+                w="40px"
+                h="40px"
+                src={technology.technology_image}
+                alt="Imagem da tecnologia"
+              ></Image>
             </HStack>
-            <SimpleGrid width="100%" minChildWidth="320px" columns={3} spacing="3">
+            <Text fontSize="sm" color="gray.300">*Não se preocupe com a ordem dos exercícios. Todos serão misturados quando os estudantes forem fazê-los.</Text>
+            <SimpleGrid
+              width="100%"
+              minChildWidth="320px"
+              columns={3}
+              spacing="3"
+            >
               {data?.levels.map((level) => (
                 <Stack key={level.id} bg="gray.800" p="4">
-                  <HStack>
-                    <Text>Dificuldade:</Text>
-                    <Text fontWeight="bold">
-                      {level.difficulty}
-                    </Text>
-                  </HStack>
+                  <VStack>
+                    <HStack>
+                      <Text>Dificuldade:</Text>
+                      <Text fontWeight="bold">{level.difficulty}</Text>
+                    </HStack>
+
+                    {level.Exercise.map((exercise) => (
+                      <VStack borderRadius="6px" key={exercise.id} p="4" spacing={0} bg="gray.900" w="100%">
+                        <Text
+                          alignSelf="flex-start"
+                          color="gray.400"
+                          fontSize="sm"
+                        >
+                          {exercise.type}
+                        </Text>
+                        <Text
+                          alignSelf="flex-start"
+                          color="gray.200"
+                          fontSize="md"
+                        >
+                          {exercise.question}
+                        </Text>
+                      </VStack>
+                    ))}
+                  </VStack>
                   <Button colorScheme="purple" size="lg" mt="2">
                     <Text fontSize="lg" fontWeight="bold">
                       Cadastrar exercícios para este nível
@@ -51,10 +90,10 @@ export default function TechnologiesConstruction({ topic, technology }) {
               ))}
             </SimpleGrid>
 
-            <Text fontSize="sm" color="gray.400">*Por padrão cada tópico possui três dificuldades.</Text>
+            <Text fontSize="sm" color="gray.400">
+              *Por padrão cada tópico possui três dificuldades.
+            </Text>
           </Stack>
-
-
         </Flex>
       </Flex>
     </>
