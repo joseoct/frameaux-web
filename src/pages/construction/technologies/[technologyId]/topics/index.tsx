@@ -1,6 +1,5 @@
 import {
   Button,
-  Divider,
   Flex,
   Image,
   HStack,
@@ -17,6 +16,8 @@ import {
   useDisclosure,
   useToast,
   VStack,
+  Link as ChakraLink,
+  Icon,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { GetServerSideProps } from 'next';
@@ -33,6 +34,9 @@ import { useCreateTopicByTechnology } from '@services/hooks/topics/useCreateTopi
 import { useUpdateTopic } from '@services/hooks/topics/useUpdateTopic';
 import { useGetTopicsByTechnology } from '@services/hooks/topics/useGetTopicsByTechnology';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { RiArrowLeftDownLine, RiArrowLeftFill, RiArrowLeftSLine } from 'react-icons/ri';
+import Link from 'next/link';
 
 interface TechnologyProps {
   technology: {
@@ -79,6 +83,7 @@ export default function TechnologiesTopics({
     setMaxLayer(maxLayerArr);
   }, [data?.maxLayer])
 
+  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
@@ -141,26 +146,41 @@ export default function TechnologiesTopics({
         <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
           <Sidebar />
 
-          <Stack
-            mb="18px"
-            direction="column"
-            w="100%"
-            alignItems="center"
-            spacing="8"
-          >
-            {data?.layerTopics.map((topics, index) => (
-              <HStack spacing="6" key={index}>
-                {topics?.map((topic) => (
-                  <TopicPopover
-                    key={topic.id}
-                    topic={topic}
-                    technology_id={technology.id}
-                    setTopic={setTopic}
-                  />
-                ))}
-              </HStack>
-            ))}
-          </Stack>
+          <VStack w="100%">
+
+            <Link href='/construction/technologies' passHref>
+              <ChakraLink
+                alignSelf="flex-start"
+                display="flex"
+                flexDir="row"
+                alignItems="center"
+                color="gray.300"
+              >
+                <Icon as={RiArrowLeftSLine} />
+                Tecnologias reponsáveis
+              </ChakraLink>
+            </Link>
+
+            <VStack
+              mb="18px"
+              w="100%"
+              alignItems="center"
+              spacing="8"
+            >
+              {data?.layerTopics.map((topics, index) => (
+                <HStack spacing="6" key={index}>
+                  {topics?.map((topic) => (
+                    <TopicPopover
+                      key={topic.id}
+                      topic={topic}
+                      technology_id={technology.id}
+                      setTopic={setTopic}
+                    />
+                  ))}
+                </HStack>
+              ))}
+            </VStack>
+          </VStack>
 
           <VStack
             maxHeight="445px"
@@ -281,10 +301,7 @@ export default function TechnologiesTopics({
                     <ModalHeader>Explicação do tópico</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                      <Textarea
-                        {...register('explanation')}
-                        rows={30}
-                      />
+                      <Textarea {...register('explanation')} rows={30} />
                     </ModalBody>
                     <ModalFooter>
                       <Button colorScheme="purple" mr={3} onClick={onClose}>

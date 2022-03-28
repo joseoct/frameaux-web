@@ -168,6 +168,7 @@ export default function CreateTechnology() {
                       {imageList.length > 0 ? (
                         <Image
                           boxSize="160px"
+                          objectFit="cover"
                           src={imageList[0].data_url}
                           alt="logo"
                         />

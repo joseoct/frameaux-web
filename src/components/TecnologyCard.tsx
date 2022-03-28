@@ -39,7 +39,7 @@ export function TecnologyCard({ technologyId, title, src }: TecnologyCardProps) 
           borderColor: 'gray.600',
         }}
       >
-        <Image src={src} alt="Technology card" />
+        <Image objectFit="cover" src={src} alt="Technology card" />
         {isMd && (
           <Text
             position="absolute"

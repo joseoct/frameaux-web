@@ -1,4 +1,16 @@
-import { Image, Button, Flex, Heading, HStack, SimpleGrid, Stack, Text, VStack } from '@chakra-ui/react';
+import {
+  Image,
+  Button,
+  Flex,
+  Heading,
+  HStack,
+  SimpleGrid,
+  Stack,
+  Text,
+  VStack,
+  Link as ChakraLink,
+  Icon,
+} from '@chakra-ui/react';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 
@@ -8,12 +20,14 @@ import { Sidebar } from '@components/Sidebar';
 import { api } from '@services/api';
 
 import { useGetLevelsByTopics } from '@services/hooks/levels/useGetLevelsByTopic';
+import { useRouter } from 'next/router';
+import { RiArrowLeftSLine } from 'react-icons/ri';
+import Link from 'next/link';
 
 export default function TechnologiesConstruction({ topic, technology }) {
-
   const { data } = useGetLevelsByTopics(topic.id);
 
-  console.log(data);
+  const router = useRouter();
 
   return (
     <>
@@ -27,6 +41,33 @@ export default function TechnologiesConstruction({ topic, technology }) {
           <Sidebar />
 
           <Stack w="100%" direction="column" spacing="4">
+            <HStack>
+              <Link href="/construction/technologies" passHref>
+                <ChakraLink
+                  alignSelf="flex-start"
+                  display="flex"
+                  flexDir="row"
+                  alignItems="center"
+                  color="gray.300"
+                >
+                  <Icon as={RiArrowLeftSLine} />
+                  Tecnologias reponsáveis
+                </ChakraLink>
+              </Link>
+              <Link href={`/construction/technologies/${technology.id}/topics`} passHref>
+                <ChakraLink
+                  alignSelf="flex-start"
+                  display="flex"
+                  flexDir="row"
+                  alignItems="center"
+                  color="gray.300"
+                >
+                  <Icon as={RiArrowLeftSLine} />
+                  Criação de tópicos de {technology.name}
+                </ChakraLink>
+              </Link>
+            </HStack>
+
             <HStack>
               <Heading>
                 Níveis do tópico
@@ -47,7 +88,11 @@ export default function TechnologiesConstruction({ topic, technology }) {
                 alt="Imagem da tecnologia"
               ></Image>
             </HStack>
-            <Text fontSize="sm" color="gray.300">*Não se preocupe com a ordem dos exercícios. Todos serão misturados quando os estudantes forem fazê-los.</Text>
+
+            <Text fontSize="sm" color="gray.300">
+              *Não se preocupe com a ordem dos exercícios. Todos serão
+              misturados quando os estudantes forem fazê-los.
+            </Text>
             <SimpleGrid
               width="100%"
               minChildWidth="320px"
@@ -63,7 +108,14 @@ export default function TechnologiesConstruction({ topic, technology }) {
                     </HStack>
 
                     {level.Exercise.map((exercise) => (
-                      <VStack borderRadius="6px" key={exercise.id} p="4" spacing={0} bg="gray.900" w="100%">
+                      <VStack
+                        borderRadius="6px"
+                        key={exercise.id}
+                        p="4"
+                        spacing={0}
+                        bg="gray.900"
+                        w="100%"
+                      >
                         <Text
                           alignSelf="flex-start"
                           color="gray.400"
@@ -81,7 +133,16 @@ export default function TechnologiesConstruction({ topic, technology }) {
                       </VStack>
                     ))}
                   </VStack>
-                  <Button colorScheme="purple" size="lg" mt="2">
+                  <Button
+                    onClick={() =>
+                      router.push(
+                        `/construction/technologies/${technology.id}/topics/${topic.id}/levels/${level.id}`,
+                      )
+                    }
+                    colorScheme="purple"
+                    size="lg"
+                    mt="2"
+                  >
                     <Text fontSize="lg" fontWeight="bold">
                       Cadastrar exercícios para este nível
                     </Text>
@@ -108,9 +169,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const technology = await api.get(`/technologies/${technologyId}`);
 
   return {
-    props: { 
-      topic: topic.data, 
-      technology: technology.data 
+    props: {
+      topic: topic.data,
+      technology: technology.data,
     },
   };
-}
+};
