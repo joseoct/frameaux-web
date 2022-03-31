@@ -10,7 +10,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 
-import Exercise from '@components/ExercisesTypes';
+import Exercise from '@components/Exercise';
 import { ExerciseTypesButtons } from '@components/ExerciseTypesButtons';
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';

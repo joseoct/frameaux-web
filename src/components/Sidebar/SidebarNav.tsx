@@ -11,8 +11,6 @@ export function SidebarNav() {
   const { data: technologies, isLoading } =
     useGetTechnologiesByUser();
 
-  console.log(technologies);
-
   return (
     <Stack spacing="12" align="flex-start" bg="gray.800" p={4} w="260px">
       <NavSection title="GERAL">
@@ -31,7 +29,7 @@ export function SidebarNav() {
           <NavLink icon={RiComputerLine} href="/construction/technologies">
             Tecnologias responsáveis
           </NavLink>
-          {technologies.map((technology) => (
+          {technologies?.map((technology) => (
             <HStack key={technology.id}>
               <Image objectFit="cover" ml="14px" boxSize="6" src={technology.technology_image} alt="Technology image" />
               <NavLink

@@ -1,11 +1,10 @@
-import { Flex, Stack, HStack, Checkbox, Button, useToast, RadioGroup, Radio, VStack, Box } from "@chakra-ui/react";
+import { Flex, Stack, HStack, Button, useToast, RadioGroup, Radio, VStack } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useCreateExerciseByLevel } from "@services/hooks/exercises/useCreateExerciseByLevel";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ExerciseInput } from "@components/Form/ExerciseInput";
 import { ExerciseTextarea } from "@components/Form/ExerciseTextarea";
-import { useGetLevelsByTopics } from "@services/hooks/levels/useGetLevelsByTopic";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
