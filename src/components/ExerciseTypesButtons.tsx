@@ -17,11 +17,11 @@ export function ExerciseTypesButtons ({ exerciseType, setExerciseType }: Exercis
         Alternativas
       </Button>
       <Button
-        variant={exerciseType === 'complete' ? 'solid' : 'outline'}
+        variant={exerciseType === 'sequency' ? 'solid' : 'outline'}
         colorScheme="purple"
-        onClick={() => setExerciseType('complete')}
+        onClick={() => setExerciseType('sequency')}
       >
-        Completar
+        Sequência
       </Button>
     </VStack>
   );

@@ -1,7 +1,7 @@
 import { Flex, Stack, HStack, Button, useToast, RadioGroup, Radio, VStack } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useCreateExerciseByLevel } from "@services/hooks/exercises/useCreateExerciseByLevel";
+import { useCreateExerciseByLevel, Alternative, Sequency } from "@services/hooks/exercises/useCreateExerciseByLevel";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { ExerciseInput } from "@components/Form/ExerciseInput";
 import { ExerciseTextarea } from "@components/Form/ExerciseTextarea";
@@ -72,9 +72,9 @@ export default function AlternativeExercise({ levelId }: AlternativeExerciseProp
         exercise: {
           type: 'alternative',
           question: data.question,
-          answer: JSON.stringify(answer),
           correct_answer: answer[correctAnswer],
-        },
+          answer,
+        } as Alternative,
         level_id: levelId,
       });
 

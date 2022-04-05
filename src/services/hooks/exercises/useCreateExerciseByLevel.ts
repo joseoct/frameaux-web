@@ -2,23 +2,22 @@ import { useMutation } from "react-query";
 import { api } from "../../api";
 import { queryClient } from "../../queryClient";
 
-type Alternative = { 
+export type Alternative = { 
   question: string;
   type: string;
   answer: string[];
   correct_answer: string;
 }
 
-type Complete = {
+export type Sequency = {
   question: string;
   type: string;
-  answer: string;
-  correct_answer: string;
+  correct_answer: string[];
 }
 
 type CreateExerciseProps = {
   level_id: string;
-  exercise: Alternative | Complete;
+  exercise: Alternative | Sequency;
 }
 
 async function createExercise ({ exercise, level_id }: CreateExerciseProps) {
