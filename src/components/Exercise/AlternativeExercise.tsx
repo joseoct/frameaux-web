@@ -73,7 +73,7 @@ export default function AlternativeExercise({ levelId }: AlternativeExerciseProp
           type: 'alternative',
           question: data.question,
           correct_answer: answer[correctAnswer],
-          answer,
+          answer: JSON.stringify(answer),
         } as Alternative,
         level_id: levelId,
       });

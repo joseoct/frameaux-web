@@ -1,22 +1,24 @@
-import { Flex, Stack, HStack, Button, useToast, Icon } from "@chakra-ui/react";
+import { Flex, Stack, HStack, Button, useToast, Icon, Text, VStack } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Sequency, useCreateExerciseByLevel } from "@services/hooks/exercises/useCreateExerciseByLevel";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { ExerciseInput } from "@components/Form/ExerciseInput";
 import { ExerciseTextarea } from "@components/Form/ExerciseTextarea";
 import { useRouter } from "next/router";
 import { RiAddLine, RiSubtractLine } from "react-icons/ri";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type SequencyExerciseData = {
   question: string;
-  sequency: string;
+  sequency: {
+    value: string;
+  }[];
 }
 
 const alternativeExerciseFormSchema = yup.object().shape({
   question: yup.string().required("O enunciado é obrigatório"),
-  sequency: yup.string().required("A sequência é obrigatória"),
+  sequency: yup.array().required("A sequência é obrigatória"),
 });
 
 type SequencyExerciseProps = {
@@ -34,6 +36,7 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
   const router = useRouter();
 
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -41,17 +44,22 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
     resolver: yupResolver(alternativeExerciseFormSchema),
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "sequency", // unique name for your Field Array
+  });
+
   const handleCreateExercise: SubmitHandler<SequencyExerciseData> = async (data, event) => {
     event.preventDefault();
 
-    const correctSequency = data.sequency.split(",");
+    const sequency = data.sequency.map(item => item.value);
 
     try {
       createExercise.mutateAsync({
         exercise: {
           type: 'sequency',
           question: data.question,
-          correct_answer: correctSequency,
+          correct_answer: JSON.stringify(sequency),
         } as Sequency,
         level_id: levelId,
       });
@@ -70,13 +78,11 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
   }
 
   function handleAddInput() {
-    setInputsCounter(state => state + 1);
+    append({});
   }
 
   function handleSubInput() {
-    if (inputsCounter > 1) {
-      setInputsCounter(state => state - 1);
-    }
+    remove(fields.length - 1);
   }
 
   return (
@@ -97,15 +103,16 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
           {...register('question')}
         />
 
+        <Text>Sequência</Text>
         <HStack w="100%">
-          {Array.from({ length: inputsCounter }).map((_, index) => (
+          {fields.map((field, index) => (
             <ExerciseInput
               key={index}
-              name="sequency"
-              placeholder="Sequência"
+              name={`sequency.${index}`}
+              placeholder={`Item ${index + 1}`}
               error={errors.sequency}
               type="text"
-              {...register('sequency')}
+              {...register(`sequency.${index}.value`)}
             />
           ))}
           <Icon onClick={handleAddInput} boxSize={8} as={RiAddLine} />

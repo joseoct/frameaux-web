@@ -5,14 +5,14 @@ import { queryClient } from "../../queryClient";
 export type Alternative = { 
   question: string;
   type: string;
-  answer: string[];
+  answer: string;
   correct_answer: string;
 }
 
 export type Sequency = {
   question: string;
   type: string;
-  correct_answer: string[];
+  correct_answer: string;
 }
 
 type CreateExerciseProps = {
