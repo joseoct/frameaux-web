@@ -9,6 +9,8 @@ import { Input } from '@components/Form/Input';
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
 import { useCreateContentCreators } from '@services/hooks/users/useCreateContentCreator';
+import { withSSRAuth } from '@utils/withSSRAuth';
+import { GetServerSideProps } from 'next';
 
 type CreateUserFormData = {
   name: string;
@@ -133,3 +135,11 @@ export default function CreateContentCreator() {
     </Box>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = withSSRAuth(async (ctx) => {
+  return {
+    props: {},
+  };
+}, {
+  roles: ['administrator'],
+});

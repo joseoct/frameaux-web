@@ -27,6 +27,8 @@ import { RiAddLine } from 'react-icons/ri';
 import ContentCreatorsTable from '../../components/ContentCreatorsTable';
 
 import { useCreateTechnologies } from '../../services/hooks/technologies/useCreateTechnologies';
+import { withSSRAuth } from '@utils/withSSRAuth';
+import { GetServerSideProps } from 'next';
 
 type CreateTechnologyFormData = {
   name: string;
@@ -225,3 +227,11 @@ export default function CreateTechnology() {
     </Box>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = withSSRAuth(async (ctx) => {
+  return {
+    props: {},
+  };
+}, {
+  roles: ['administrator'],
+});

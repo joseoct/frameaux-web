@@ -2,11 +2,9 @@ import { Flex, Icon, IconButton, useBreakpointValue, useDisclosure } from '@chak
 
 import { Profile } from './Profile';
 import { NotificationsNav } from './NotificationsNav';
-import { Searchbox } from './Searchbox';
 import { Logo } from './Logo';
 import { useSidebarDrawer } from '../../contexts/SidebarDrawerContext';
 import { RiMenuLine } from 'react-icons/ri';
-import { Sidebar } from '../Sidebar';
 
 export function Header () {
 
@@ -40,8 +38,6 @@ export function Header () {
       )}
 
       <Logo />
-
-      {isLg && <Searchbox />}
 
       <Flex align="center" ml="auto">
         <NotificationsNav />

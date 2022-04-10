@@ -12,7 +12,7 @@ export function validateUserPermissions({
   roles,
 }: ValidateUserPermissionsProps) {
   if (roles?.length > 0) {
-    const hasRole = roles.includes(user.role)
+    const hasRole = roles.includes(user.role);
 
     if (!hasRole) {
       return false;

@@ -35,6 +35,8 @@ import { Sidebar } from '@components/Sidebar';
 import { useGetTechnologies } from '@services/hooks/technologies/useGetTechnologies';
 import { useDeleteTechnology } from '@services/hooks/technologies/useDeleteTechnology';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next';
+import { withSSRAuth } from '@utils/withSSRAuth';
 
 export default function Technologies() {
   const { data, isLoading, isFetching, error } = useGetTechnologies();
@@ -212,3 +214,11 @@ export default function Technologies() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = withSSRAuth(async (ctx) => {
+  return {
+    props: {},
+  };
+}, {
+  roles: ['administrator'],
+});

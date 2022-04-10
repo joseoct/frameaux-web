@@ -5,6 +5,8 @@ import {
 import ContentCreatorsTable from '@components/ContentCreatorsTable';
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
+import { withSSRAuth } from '@utils/withSSRAuth';
+import { GetServerSideProps } from 'next';
 
 export default function ContentCreators() {
   return (
@@ -24,3 +26,12 @@ export default function ContentCreators() {
     </Box>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = withSSRAuth(async (ctx) => {
+  return {
+    props: {},
+  };
+}, {
+  roles: ['administrator'],
+});
+

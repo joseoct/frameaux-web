@@ -1,5 +1,4 @@
-import { Box, Flex, SimpleGrid, Spinner, Text, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Flex, SimpleGrid } from '@chakra-ui/react';
 
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
@@ -34,4 +33,6 @@ export const getServerSideProps = withSSRAuth(async (ctx) => {
   return {
     props: {},
   };
+}, {
+  roles: ['administrator'],
 });
