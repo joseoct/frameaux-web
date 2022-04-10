@@ -82,7 +82,7 @@ export default function TechnologiesTopics({
 
     setMaxLayer(maxLayerArr);
     setValue('layer', 1);
-  }, [data?.maxLayer])
+  }, [data?.maxLayer, setValue]);
 
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
