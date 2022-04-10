@@ -77,6 +77,16 @@ export default function TechnologiesTopics({
   const createTopic = useCreateTopicByTechnology();
   const updateTopic = useUpdateTopic();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    reset,
+  } = useForm({
+    resolver: yupResolver(createTopicSchema),
+  });
+
   useEffect(() => {
     const maxLayerArr = new Array(data?.maxLayer).fill(0);
 
@@ -88,15 +98,6 @@ export default function TechnologiesTopics({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    setValue,
-    reset,
-  } = useForm({
-    resolver: yupResolver(createTopicSchema),
-  });
 
   useEffect(() => {
     setValue('name', topic?.name);
