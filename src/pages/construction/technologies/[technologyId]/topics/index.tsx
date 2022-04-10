@@ -81,6 +81,7 @@ export default function TechnologiesTopics({
     const maxLayerArr = new Array(data?.maxLayer).fill(0);
 
     setMaxLayer(maxLayerArr);
+    setValue('layer', 1);
   }, [data?.maxLayer])
 
   const router = useRouter();
