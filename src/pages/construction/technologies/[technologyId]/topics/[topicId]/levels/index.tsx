@@ -10,13 +10,6 @@ import {
   VStack,
   Link as ChakraLink,
   Icon,
-  AlertDialog,
-  AlertDialogBody,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogOverlay,
-  useDisclosure,
 } from "@chakra-ui/react";
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
@@ -28,25 +21,27 @@ import { api } from '@services/api';
 
 import { useGetLevelsByTopics } from '@services/hooks/levels/useGetLevelsByTopic';
 import { useRouter } from 'next/router';
-import { RiArrowLeftSLine, RiDeleteBin2Line } from 'react-icons/ri';
+import { RiArrowLeftSLine, RiDeleteBin2Line, RiInformationFill } from 'react-icons/ri';
 import Link from 'next/link';
-import { useRef } from 'react';
+import { useState } from 'react';
 import { useDeleteExercise } from "@services/hooks/exercises/useDeleteExercise";
 
 export default function TechnologiesConstruction({ topic, technology }) {
   const { data } = useGetLevelsByTopics(topic.id);
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const cancelRef = useRef()
+  const [exerciseToBeDeleted, setExerciseToBeDeleted] = useState<string>('');
 
   const router = useRouter();
 
-  const deleteTechnology = useDeleteExercise(topic.id);
+  const deleteExercise = useDeleteExercise(topic.id);
 
   const handleDeleteExercise = (exercise_id: string) => {
-    deleteTechnology.mutateAsync(exercise_id);
+    setExerciseToBeDeleted(exercise_id);
 
-    onClose();
+    if (exercise_id === exerciseToBeDeleted) {
+      deleteExercise.mutateAsync(exercise_id);
+      setExerciseToBeDeleted('');
+    }
   }
 
   return (
@@ -160,52 +155,9 @@ export default function TechnologiesConstruction({ topic, technology }) {
                           cursor="pointer"
                           boxSize="24px"
                           color="red.400"
-                          as={RiDeleteBin2Line}
-                          onClick={() => onOpen()}
+                          as={exerciseToBeDeleted === exercise.id ? RiInformationFill : RiDeleteBin2Line}
+                          onClick={() => handleDeleteExercise(exercise.id)}
                         />
-
-                        <AlertDialog
-                          isOpen={isOpen}
-                          leastDestructiveRef={cancelRef}
-                          onClose={onClose}
-                        >
-                          <AlertDialogOverlay>
-                            <AlertDialogContent bg="gray.800">
-                              <AlertDialogHeader
-                                fontSize="lg"
-                                fontWeight="bold"
-                              >
-                                <HStack>
-                                  <Text>Deletar o exercício</Text>
-                                </HStack>
-                              </AlertDialogHeader>
-
-                              <AlertDialogBody>
-                                Você tem certeza que deseja deletar o
-                                exercício?
-                              </AlertDialogBody>
-
-                              <AlertDialogFooter>
-                                <Button
-                                  color="black"
-                                  ref={cancelRef}
-                                  onClick={onClose}
-                                >
-                                  Cancel
-                                </Button>
-                                <Button
-                                  colorScheme="red"
-                                  onClick={() =>
-                                    handleDeleteExercise(exercise.id)
-                                  }
-                                  ml={3}
-                                >
-                                  Deletar
-                                </Button>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialogOverlay>
-                        </AlertDialog>
                       </HStack>
                     ))}
                   </VStack>

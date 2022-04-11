@@ -23,8 +23,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
-import { useRef } from 'react';
-import { RiAddLine, RiDeleteBin2Line, RiPencilLine } from 'react-icons/ri';
+import { useRef, useState } from 'react';
+import { RiAddLine, RiDeleteBin2Line, RiInformationFill, RiPencilLine } from 'react-icons/ri';
 import Head from 'next/head';
 
 import { Header } from '@components/Header';
@@ -39,17 +39,19 @@ import { withSSRAuth } from '@utils/withSSRAuth';
 export default function Technologies() {
   const { data, isLoading, isFetching, error } = useGetTechnologies();
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const cancelRef = useRef()
+  const [technologyToBeDeleted, setExerciseToBeDeleted] = useState<string>('');
 
   const router = useRouter();
 
   const deleteTechnology = useDeleteTechnology();
 
   const handleDeleteTechnology = (technology_id: string) => {
-    deleteTechnology.mutateAsync(technology_id);
+    setExerciseToBeDeleted(technology_id);
 
-    onClose();
+    if (technology_id === technologyToBeDeleted) {
+      deleteTechnology.mutateAsync(technology_id);
+      setExerciseToBeDeleted('');
+    }
   }
 
   return (
@@ -135,56 +137,9 @@ export default function Technologies() {
                                   cursor="pointer"
                                   boxSize="24px"
                                   color="red.400"
-                                  as={RiDeleteBin2Line}
-                                  onClick={() => onOpen()}
+                                  as={technologyToBeDeleted === technology.id ? RiInformationFill : RiDeleteBin2Line}
+                                  onClick={() => handleDeleteTechnology(technology.id)}
                                 />
-                                <AlertDialog
-                                  isOpen={isOpen}
-                                  leastDestructiveRef={cancelRef}
-                                  onClose={onClose}
-                                >
-                                  <AlertDialogOverlay>
-                                    <AlertDialogContent bg="gray.800">
-                                      <AlertDialogHeader
-                                        fontSize="lg"
-                                        fontWeight="bold"
-                                      >
-                                        <HStack>
-                                          <Text>Deletar a tecnologia:</Text>
-                                          <Text color="purple.400">
-                                            {technology.name}
-                                          </Text>
-                                        </HStack>
-                                      </AlertDialogHeader>
-
-                                      <AlertDialogBody>
-                                        Você tem certeza que deseja deletar a
-                                        tecnologia?
-                                      </AlertDialogBody>
-
-                                      <AlertDialogFooter>
-                                        <Button
-                                          color="black"
-                                          ref={cancelRef}
-                                          onClick={onClose}
-                                        >
-                                          Cancel
-                                        </Button>
-                                        <Button
-                                          colorScheme="red"
-                                          onClick={() =>
-                                            handleDeleteTechnology(
-                                              technology.id,
-                                            )
-                                          }
-                                          ml={3}
-                                        >
-                                          Deletar
-                                        </Button>
-                                      </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                  </AlertDialogOverlay>
-                                </AlertDialog>
                               </Box>
                             </Tooltip>
                             <Tooltip label="Editar tecnologia">
