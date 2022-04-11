@@ -10,7 +10,14 @@ import {
   VStack,
   Link as ChakraLink,
   Icon,
-} from '@chakra-ui/react';
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  useDisclosure,
+} from "@chakra-ui/react";
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 
@@ -21,13 +28,26 @@ import { api } from '@services/api';
 
 import { useGetLevelsByTopics } from '@services/hooks/levels/useGetLevelsByTopic';
 import { useRouter } from 'next/router';
-import { RiArrowLeftSLine } from 'react-icons/ri';
+import { RiArrowLeftSLine, RiDeleteBin2Line } from 'react-icons/ri';
 import Link from 'next/link';
+import { useRef } from 'react';
+import { useDeleteExercise } from "@services/hooks/exercises/useDeleteExercise";
 
 export default function TechnologiesConstruction({ topic, technology }) {
   const { data } = useGetLevelsByTopics(topic.id);
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = useRef()
+
   const router = useRouter();
+
+  const deleteTechnology = useDeleteExercise(topic.id);
+
+  const handleDeleteExercise = (exercise_id: string) => {
+    deleteTechnology.mutateAsync(exercise_id);
+
+    onClose();
+  }
 
   return (
     <>
@@ -54,7 +74,10 @@ export default function TechnologiesConstruction({ topic, technology }) {
                   Tecnologias reponsáveis
                 </ChakraLink>
               </Link>
-              <Link href={`/construction/technologies/${technology.id}/topics`} passHref>
+              <Link
+                href={`/construction/technologies/${technology.id}/topics`}
+                passHref
+              >
                 <ChakraLink
                   alignSelf="flex-start"
                   display="flex"
@@ -108,29 +131,82 @@ export default function TechnologiesConstruction({ topic, technology }) {
                     </HStack>
 
                     {level.Exercise.map((exercise) => (
-                      <VStack
+                      <HStack
                         borderRadius="6px"
-                        key={exercise.id}
                         p="4"
-                        spacing={0}
                         bg="gray.900"
                         w="100%"
+                        key={exercise.id}
+                        justifyContent="space-between"
                       >
-                        <Text
-                          alignSelf="flex-start"
-                          color="gray.400"
-                          fontSize="sm"
+                        <VStack spacing={0}>
+                          <Text
+                            alignSelf="flex-start"
+                            color="gray.400"
+                            fontSize="sm"
+                          >
+                            {exercise.type}
+                          </Text>
+                          <Text
+                            alignSelf="flex-start"
+                            color="gray.200"
+                            fontSize="md"
+                          >
+                            {exercise.question}
+                          </Text>
+                        </VStack>
+
+                        <Icon
+                          cursor="pointer"
+                          boxSize="24px"
+                          color="red.400"
+                          as={RiDeleteBin2Line}
+                          onClick={() => onOpen()}
+                        />
+
+                        <AlertDialog
+                          isOpen={isOpen}
+                          leastDestructiveRef={cancelRef}
+                          onClose={onClose}
                         >
-                          {exercise.type}
-                        </Text>
-                        <Text
-                          alignSelf="flex-start"
-                          color="gray.200"
-                          fontSize="md"
-                        >
-                          {exercise.question}
-                        </Text>
-                      </VStack>
+                          <AlertDialogOverlay>
+                            <AlertDialogContent bg="gray.800">
+                              <AlertDialogHeader
+                                fontSize="lg"
+                                fontWeight="bold"
+                              >
+                                <HStack>
+                                  <Text>Deletar o exercício</Text>
+                                </HStack>
+                              </AlertDialogHeader>
+
+                              <AlertDialogBody>
+                                Você tem certeza que deseja deletar o
+                                exercício?
+                              </AlertDialogBody>
+
+                              <AlertDialogFooter>
+                                <Button
+                                  color="black"
+                                  ref={cancelRef}
+                                  onClick={onClose}
+                                >
+                                  Cancel
+                                </Button>
+                                <Button
+                                  colorScheme="red"
+                                  onClick={() =>
+                                    handleDeleteExercise(exercise.id)
+                                  }
+                                  ml={3}
+                                >
+                                  Deletar
+                                </Button>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialogOverlay>
+                        </AlertDialog>
+                      </HStack>
                     ))}
                   </VStack>
                   <Button
