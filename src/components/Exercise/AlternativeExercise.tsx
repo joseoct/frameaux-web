@@ -6,7 +6,7 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { ExerciseInput } from "@components/Form/ExerciseInput";
 import { ExerciseTextarea } from "@components/Form/ExerciseTextarea";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RiAddLine, RiSubtractLine } from "react-icons/ri";
 
 type AlternativeExerciseData = {
@@ -45,6 +45,7 @@ export default function AlternativeExercise({ levelId }: AlternativeExerciseProp
   const [correctAnswer, setCorrectAnswer] = useState<string>("");
 
   const {
+    setFocus,
     control,
     register,
     handleSubmit,
@@ -60,10 +61,13 @@ export default function AlternativeExercise({ levelId }: AlternativeExerciseProp
 
   useEffect(() => {
     if (fields.length === 0) {
-      append({});
-      append({});
+      append({ value: '' })
+      append({ value: '' })
     }
-  }, [append, fields.length])
+
+    setFocus('question');
+
+  }, [append, fields.length, setFocus]);
 
   const handleCreateExercise: SubmitHandler<AlternativeExerciseData> = async (data, event) => {
     event.preventDefault();

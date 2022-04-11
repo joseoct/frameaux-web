@@ -42,6 +42,7 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
   const router = useRouter();
 
   const {
+    setFocus,
     control,
     register,
     handleSubmit,
@@ -60,7 +61,9 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
       append({ value: '' })
       append({ value: '' })
     }
-  }, [append, fields.length])
+
+    setFocus('question')
+  }, [append, fields.length, setFocus])
 
   const handleCreateExercise: SubmitHandler<SequencyExerciseData> = async (data, event) => {
     event.preventDefault();
