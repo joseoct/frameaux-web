@@ -34,8 +34,6 @@ export const ExerciseInput = forwardRef<HTMLInputElement, InputProps>(
           {...rest}
         />
 
-      {!!error && <FormErrorMessage>{error.message}</FormErrorMessage> }
-
       </FormControl>
     );
   },

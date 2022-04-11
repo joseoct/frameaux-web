@@ -1,27 +1,33 @@
-import { Flex, Stack, HStack, Button, useToast, RadioGroup, Radio, VStack } from "@chakra-ui/react";
+import { Flex, Stack, Text, Button, useToast, RadioGroup, Radio, VStack, Icon, HStack } from "@chakra-ui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useCreateExerciseByLevel, Alternative, Sequency } from "@services/hooks/exercises/useCreateExerciseByLevel";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { Alternative, useCreateExerciseByLevel } from "@services/hooks/exercises/useCreateExerciseByLevel";
+import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import { ExerciseInput } from "@components/Form/ExerciseInput";
 import { ExerciseTextarea } from "@components/Form/ExerciseTextarea";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { RiAddLine, RiSubtractLine } from "react-icons/ri";
 
 type AlternativeExerciseData = {
   question: string;
-  alternative1: string;
-  alternative2: string;
-  alternative3: string;
-  alternative4: string;
+  answers: {
+    value: string;
+  }[];
 }
 
 const alternativeExerciseFormSchema = yup.object().shape({
-  question: yup.string().required("O enunciado é obrigatório"),
-  alternative1: yup.string().required("A alternativa é obrigatória"),
-  alternative2: yup.string().required("A alternativa é obrigatória"),
-  alternative3: yup.string().required("A alternativa é obrigatória"),
-  alternative4: yup.string().required("A alternativa é obrigatória"),
+  question: yup.string().required('O enunciado é obrigatório'),
+  answers: yup
+    .array()
+    .min(2, 'É necessário pelo menos 2 alternativas')
+    .max(4, 'O máximo de alternativas é de 4')
+    .required('As alternativas são obrigatórias')
+    .of(
+      yup.object().shape({
+        value: yup.string().required('O valor é obrigatório'),
+      }),
+    ),
 });
 
 type AlternativeExerciseProps = {
@@ -30,15 +36,16 @@ type AlternativeExerciseProps = {
 
 export default function AlternativeExercise({ levelId }: AlternativeExerciseProps) {
 
-  const [correctAnswer, setCorrectAnswer] = useState<string>("");
-
   const createExercise = useCreateExerciseByLevel();
 
   const toast = useToast();
 
   const router = useRouter();
 
+  const [correctAnswer, setCorrectAnswer] = useState<string>("");
+
   const {
+    control,
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -46,15 +53,20 @@ export default function AlternativeExercise({ levelId }: AlternativeExerciseProp
     resolver: yupResolver(alternativeExerciseFormSchema),
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "answers", // unique name for your Field Array
+  });
+
+  useEffect(() => {
+    if (fields.length === 0) {
+      append({});
+      append({});
+    }
+  }, [append, fields.length])
+
   const handleCreateExercise: SubmitHandler<AlternativeExerciseData> = async (data, event) => {
     event.preventDefault();
-
-    const answer = new Array(4);
-
-    answer[0] = data.alternative1;
-    answer[1] = data.alternative2;
-    answer[2] = data.alternative3;
-    answer[3] = data.alternative4;
 
     if (!correctAnswer) {
       toast({
@@ -67,13 +79,15 @@ export default function AlternativeExercise({ levelId }: AlternativeExerciseProp
       return;
     }
 
+    const answers = data.answers.map(item => item.value);
+
     try {
       createExercise.mutateAsync({
         exercise: {
           type: 'alternative',
           question: data.question,
-          correct_answer: answer[correctAnswer],
-          answer: JSON.stringify(answer),
+          correct_answer: data.answers[correctAnswer].value,
+          answer: JSON.stringify(answers),
         } as Alternative,
         level_id: levelId,
       });
@@ -90,6 +104,18 @@ export default function AlternativeExercise({ levelId }: AlternativeExerciseProp
       });
     }
 
+  }
+
+  function handleAddInput() {
+    if (fields.length < 4) {
+      append({});
+    }
+  }
+
+  function handleSubInput() {
+    if (fields.length > 2) {
+      remove(fields.length - 1);
+    }
   }
 
   return (
@@ -110,55 +136,43 @@ export default function AlternativeExercise({ levelId }: AlternativeExerciseProp
           {...register('question')}
         />
 
+        <HStack>
+          <Text>Alternativas</Text>
+
+          <Icon onClick={handleAddInput} boxSize={8} as={RiAddLine} />
+          <Icon onClick={handleSubInput} boxSize={8} as={RiSubtractLine} />
+
+          {errors.answers && (
+            <Text color="red.500">{errors.answers.message}</Text>
+          )}
+        </HStack>
+
         <RadioGroup
           as={VStack}
           onChange={setCorrectAnswer}
           value={correctAnswer}
         >
-          <HStack w="100%">
-            <Radio value="0" colorScheme="purple" />
-            <ExerciseInput
-              name="alternative1"
-              placeholder="Alternativa 1"
-              error={errors.alternative1}
-              type="text"
-              {...register('alternative1')}
-            />
-          </HStack>
-
-          <HStack w="100%">
-            <Radio value="1" colorScheme="purple" />
-            <ExerciseInput
-              name="alternative2"
-              placeholder="Alternativa 2"
-              error={errors.alternative2}
-              type="text"
-              {...register('alternative2')}
-            />
-          </HStack>
-
-          <HStack w="100%">
-            <Radio value="2" colorScheme="purple" />
-            <ExerciseInput
-              name="alternative3"
-              placeholder="Alternativa 3"
-              error={errors.alternative3}
-              type="text"
-              {...register('alternative3')}
-            />
-          </HStack>
-
-          <HStack w="100%">
-            <Radio value="3" colorScheme="purple" />
-            <ExerciseInput
-              name="alternative4"
-              placeholder="Alternativa 4"
-              error={errors.alternative4}
-              type="text"
-              {...register('alternative4')}
-            />
-          </HStack>
+          {fields.map((field, index) => (
+            <HStack key={field.id} w="100%">
+              <Radio
+                value={index.toString()}
+                colorScheme="purple"
+              />
+              <ExerciseInput
+                key={index}
+                name={`sequency.${index}`}
+                placeholder={`Alternativa ${index + 1}`}
+                error={errors.answers && errors.answers[index]}
+                type="text"
+                {...register(`answers.${index}.value`)}
+              />
+            </HStack>
+          ))}
         </RadioGroup>
+
+        {errors.correct_answer && (
+          <Text color="red.500">{errors.correct_answer.message}</Text>
+        )}
       </Stack>
 
       <Button

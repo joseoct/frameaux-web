@@ -17,8 +17,16 @@ type SequencyExerciseData = {
 }
 
 const alternativeExerciseFormSchema = yup.object().shape({
-  question: yup.string().required("O enunciado é obrigatório"),
-  sequency: yup.array().required("A sequência é obrigatória"),
+  question: yup.string().required('O enunciado é obrigatório'),
+  sequency: yup
+    .array()
+    .min(2, 'É necessário pelo menos 2 itens na sequência')
+    .required('A sequência é obrigatória')
+    .of(
+      yup.object().shape({
+        value: yup.string().required('O valor é obrigatório'),
+      }),
+    ),
 });
 
 type SequencyExerciseProps = {
@@ -28,8 +36,6 @@ type SequencyExerciseProps = {
 export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
 
   const createExercise = useCreateExerciseByLevel();
-
-  const [inputsCounter, setInputsCounter] = useState<number>(1);
 
   const toast = useToast();
 
@@ -48,6 +54,13 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
     control,
     name: "sequency", // unique name for your Field Array
   });
+
+  useEffect(() => {
+    if (fields.length === 0) {
+      append({ value: '' })
+      append({ value: '' })
+    }
+  }, [append, fields.length])
 
   const handleCreateExercise: SubmitHandler<SequencyExerciseData> = async (data, event) => {
     event.preventDefault();
@@ -82,7 +95,9 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
   }
 
   function handleSubInput() {
-    remove(fields.length - 1);
+    if (fields.length > 2) {
+      remove(fields.length - 1);
+    }
   }
 
   return (
@@ -103,20 +118,28 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
           {...register('question')}
         />
 
-        <Text>Sequência</Text>
+        <HStack>
+          <Text>Sequência</Text>
+
+          <Icon onClick={handleAddInput} boxSize={8} as={RiAddLine} />
+          <Icon onClick={handleSubInput} boxSize={8} as={RiSubtractLine} />
+
+          {errors.sequency && (
+            <Text color="red.500">{errors.sequency.message}</Text>
+          )}
+        </HStack>
+
         <HStack w="100%">
           {fields.map((field, index) => (
             <ExerciseInput
               key={index}
               name={`sequency.${index}`}
               placeholder={`Item ${index + 1}`}
-              error={errors.sequency}
+              error={errors.sequency && errors.sequency[index]}
               type="text"
               {...register(`sequency.${index}.value`)}
             />
           ))}
-          <Icon onClick={handleAddInput} boxSize={8} as={RiAddLine} />
-          <Icon onClick={handleSubInput} boxSize={8} as={RiSubtractLine} />
         </HStack>
       </Stack>
 

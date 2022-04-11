@@ -71,7 +71,6 @@ export default function UpdateTechnology({ technology }) {
     values,
   ) => {
 
-    console.log(contentCreatorsIds);
     if(contentCreatorsIds.length === 0) {
       toast({
         title: 'Error',
@@ -174,7 +173,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { technology_id } = context.params;
 
   const { data } = await api.get(`/technologies/${technology_id}`);
-  console.log(technology_id);
 
   return {
     props: {

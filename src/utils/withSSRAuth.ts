@@ -39,7 +39,6 @@ export function withSSRAuth<P>(
         user,
         roles
       });
-      console.log(userHasValidPermissions);
 
       if (!userHasValidPermissions) {
         return {
