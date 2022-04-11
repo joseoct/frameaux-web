@@ -1,4 +1,4 @@
-import { VStack, Button } from "@chakra-ui/react";
+import { HStack, Button } from "@chakra-ui/react";
 import { Dispatch } from "react";
 
 type ExerciseTypesButtonsProps = {
@@ -8,7 +8,7 @@ type ExerciseTypesButtonsProps = {
 
 export function ExerciseTypesButtons ({ exerciseType, setExerciseType }: ExerciseTypesButtonsProps) {
   return (
-    <VStack>
+    <HStack spacing={2}>
       <Button
         variant={exerciseType === 'alternative' ? 'solid' : 'outline'}
         colorScheme="purple"
@@ -23,6 +23,6 @@ export function ExerciseTypesButtons ({ exerciseType, setExerciseType }: Exercis
       >
         Sequência
       </Button>
-    </VStack>
+    </HStack>
   );
 }

@@ -143,8 +143,8 @@ export default function AlternativeExercise({ levelId }: AlternativeExerciseProp
         <HStack>
           <Text>Alternativas</Text>
 
-          <Icon onClick={handleAddInput} boxSize={8} as={RiAddLine} />
-          <Icon onClick={handleSubInput} boxSize={8} as={RiSubtractLine} />
+          <Icon cursor="pointer" onClick={handleAddInput} boxSize={8} as={RiAddLine} />
+          <Icon cursor="pointer" onClick={handleSubInput} boxSize={8} as={RiSubtractLine} />
 
           {errors.answers && (
             <Text color="red.500">{errors.answers.message}</Text>
@@ -186,7 +186,7 @@ export default function AlternativeExercise({ levelId }: AlternativeExerciseProp
         size="lg"
         isLoading={isSubmitting}
       >
-        Cadastrar exercício
+        Cadastrar exercício de alternativas
       </Button>
     </Flex>
   );

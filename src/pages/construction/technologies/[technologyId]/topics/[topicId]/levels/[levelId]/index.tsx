@@ -83,45 +83,45 @@ export default function TechnologiesConstruction({ topic, technology, level }) {
               </Link>
             </HStack>
 
+            <VStack bg="gray.800" spacing="4" py={4}>
+              <HStack>
+                <Heading as="h2" size="md">
+                  Criação dos exercícios de nível
+                  <Text as="span" color="purple.400">
+                    {' '}
+                    {level.difficulty}{' '}
+                  </Text>
+                  do tópico
+                  <Text as="span" color="purple.400">
+                    {' '}
+                    {topic.name}{' '}
+                  </Text>
+                  da tecnologia
+                  <Text as="span" color="purple.400">
+                    {' '}
+                    {technology.name}{' '}
+                  </Text>
+                </Heading>
+                <Image
+                  w="40px"
+                  h="40px"
+                  src={technology.technology_image}
+                  alt="Imagem da tecnologia"
+                ></Image>
+              </HStack>
+
+              <Text>Criar exercícios do tipo:</Text>
+
+              <ExerciseTypesButtons
+                setExerciseType={setExerciseType}
+                exerciseType={exerciseType}
+              />
+            </VStack>
+
             {exerciseType && (
               <Exercise exerciseType={exerciseType} levelId={level.id} />
             )}
           </Stack>
-
-          <VStack p="4" bg="gray.800" ml="8" spacing="4" maxHeight={270}>
-            <HStack>
-              <Heading as="h2" size="md">
-                Criação dos exercícios de nível
-                <Text as="span" color="purple.400">
-                  {' '}
-                  {level.difficulty}{' '}
-                </Text>
-                do tópico
-                <Text as="span" color="purple.400">
-                  {' '}
-                  {topic.name}{' '}
-                </Text>
-                da tecnologia
-                <Text as="span" color="purple.400">
-                  {' '}
-                  {technology.name}{' '}
-                </Text>
-              </Heading>
-              <Image
-                w="40px"
-                h="40px"
-                src={technology.technology_image}
-                alt="Imagem da tecnologia"
-              ></Image>
-            </HStack>
-
-            <Text>Criar exercícios do tipo:</Text>
-
-            <ExerciseTypesButtons
-              setExerciseType={setExerciseType}
-              exerciseType={exerciseType}
-            />
-          </VStack>
         </Flex>
       </Flex>
     </>

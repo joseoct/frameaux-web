@@ -124,8 +124,8 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
         <HStack>
           <Text>Sequência</Text>
 
-          <Icon onClick={handleAddInput} boxSize={8} as={RiAddLine} />
-          <Icon onClick={handleSubInput} boxSize={8} as={RiSubtractLine} />
+          <Icon cursor="pointer" onClick={handleAddInput} boxSize={8} as={RiAddLine} />
+          <Icon cursor="pointer" onClick={handleSubInput} boxSize={8} as={RiSubtractLine} />
 
           {errors.sequency && (
             <Text color="red.500">{errors.sequency.message}</Text>
@@ -153,7 +153,7 @@ export default function SequencyExercise({ levelId }: SequencyExerciseProps) {
         size="lg"
         isLoading={isSubmitting}
       >
-        Cadastrar exercício
+        Cadastrar exercício de sequência
       </Button>
     </Flex>
   );
