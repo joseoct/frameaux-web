@@ -39,8 +39,9 @@ export default function TechnologiesConstruction({ topic, technology }) {
     setExerciseToBeDeleted(exercise_id);
 
     if (exercise_id === exerciseToBeDeleted) {
-      deleteExercise.mutateAsync(exercise_id);
-      setExerciseToBeDeleted('');
+      deleteExercise
+        .mutateAsync(exercise_id)
+        .then(() => setExerciseToBeDeleted(''));
     }
   }
 
