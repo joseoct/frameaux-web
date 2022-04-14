@@ -108,7 +108,7 @@ export function TopicPopover({ topic, technology_id, setTopic }: PopoverTopicPro
 
                   <AlertDialogFooter>
                     <Button color="black" ref={cancelRef} onClick={onClose}>
-                      Cancel
+                      Cancelar
                     </Button>
                     <Button colorScheme="red" onClick={() => handleDeleteTopic()} ml={3}>
                       Deletar

@@ -34,8 +34,7 @@ import { useCreateTopicByTechnology } from '@services/hooks/topics/useCreateTopi
 import { useUpdateTopic } from '@services/hooks/topics/useUpdateTopic';
 import { useGetTopicsByTechnology } from '@services/hooks/topics/useGetTopicsByTechnology';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { RiArrowLeftDownLine, RiArrowLeftFill, RiArrowLeftSLine } from 'react-icons/ri';
+import { RiArrowLeftSLine } from 'react-icons/ri';
 import Link from 'next/link';
 
 interface TechnologyProps {
@@ -60,8 +59,8 @@ type CreateTopicFormData = {
 }
 
 const createTopicSchema = yup.object().shape({
-  name: yup.string().required("O nome é obrigatório"),
-  layer: yup.number().required(),
+  name: yup.string().required('O nome é obrigatório'),
+  layer: yup.number().typeError("Selecione uma camada").required(),
   explanation: yup.string().required(),
 });
 
@@ -91,13 +90,10 @@ export default function TechnologiesTopics({
     const maxLayerArr = new Array(data?.maxLayer).fill(0);
 
     setMaxLayer(maxLayerArr);
-    setValue('layer', 1);
-  }, [data?.maxLayer, setValue]);
+  }, [data?.maxLayer, setValue, register]);
 
-  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-
 
   useEffect(() => {
     setValue('name', topic?.name);
@@ -108,7 +104,7 @@ export default function TechnologiesTopics({
   const handleCreateTopic: SubmitHandler<CreateTopicFormData> = async (
     values,
   ) => {
-    
+    console.log(values)
     try {
       if (topic) {
         await updateTopic.mutateAsync({

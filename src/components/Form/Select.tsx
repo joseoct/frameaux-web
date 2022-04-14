@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormErrorMessage,
 } from '@chakra-ui/react';
-import { Dispatch, forwardRef, SetStateAction } from 'react';
+import { forwardRef } from 'react';
 import { FieldError } from 'react-hook-form'
 
 interface SelectProps extends ChakraSelectProps {
@@ -26,6 +26,12 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         <Text></Text>
 
         <ChakraSelect
+          placeholder="Selecione uma camada"
+          sx={{
+            "& option[value='']": {
+              color: "gray.500",
+            },
+          }}
           name={name}
           borderColor="gray.900"
           bg="gray.900"
@@ -46,7 +52,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           {maxLayer.map((_, index) => (
             <option
               key={index + 1}
-              style={{ backgroundColor: 'initial' }}
+              style={{ color: 'initial' }}
               value={index + 1}
             >
               {index + 1}
