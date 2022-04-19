@@ -1,4 +1,4 @@
-import { Flex, SimpleGrid } from '@chakra-ui/react';
+import { Flex, SimpleGrid, VStack } from '@chakra-ui/react';
 
 import { Header } from '@components/Header';
 import { Sidebar } from '@components/Sidebar';
@@ -18,21 +18,22 @@ export default function Dashboard() {
         <Sidebar />
 
         <SimpleGrid flex="1" gap="4" minChildWidth="320px" align-items="flex">
-          
           {data?.totals.map((total, index) => (
-            <TotalCard key={index} isLoading={isLoading} total={total}/>
+            <TotalCard key={index} isLoading={isLoading} total={total} />
           ))}
-          
         </SimpleGrid>
       </Flex>
     </Flex>
   );
 }
 
-export const getServerSideProps = withSSRAuth(async (ctx) => {
-  return {
-    props: {},
-  };
-}, {
-  roles: ['administrator'],
-});
+export const getServerSideProps = withSSRAuth(
+  async (ctx) => {
+    return {
+      props: {},
+    };
+  },
+  {
+    roles: ['administrator'],
+  },
+);
