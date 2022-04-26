@@ -5,7 +5,8 @@ import {
   Heading,
   Icon,
   Table,
-  Tbody, Td,
+  Tbody,
+  Td,
   Th,
   Thead,
   Tr,
@@ -14,17 +15,15 @@ import {
   HStack,
   Image,
   Tooltip,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
-  useDisclosure,
 } from '@chakra-ui/react';
 import NextLink from 'next/link';
-import { useRef, useState } from 'react';
-import { RiAddLine, RiDeleteBin2Line, RiInformationFill, RiPencilLine } from 'react-icons/ri';
+import { useState } from 'react';
+import {
+  RiAddLine,
+  RiDeleteBin2Line,
+  RiInformationFill,
+  RiPencilLine,
+} from 'react-icons/ri';
 import Head from 'next/head';
 
 import { Header } from '@components/Header';
@@ -52,7 +51,7 @@ export default function Technologies() {
       deleteTechnology.mutateAsync(technology_id);
       setExerciseToBeDeleted('');
     }
-  }
+  };
 
   return (
     <>
@@ -116,7 +115,9 @@ export default function Technologies() {
                               src={technology.technology_image}
                               alt={technology.technology_image}
                             />
-                            <Text color="purple.200" fontWeight="bold">{technology.name}</Text>
+                            <Text color="purple.200" fontWeight="bold">
+                              {technology.name}
+                            </Text>
                           </HStack>
                         </Td>
                         <Td>
@@ -137,8 +138,14 @@ export default function Technologies() {
                                   cursor="pointer"
                                   boxSize="24px"
                                   color="red.400"
-                                  as={technologyToBeDeleted === technology.id ? RiInformationFill : RiDeleteBin2Line}
-                                  onClick={() => handleDeleteTechnology(technology.id)}
+                                  as={
+                                    technologyToBeDeleted === technology.id
+                                      ? RiInformationFill
+                                      : RiDeleteBin2Line
+                                  }
+                                  onClick={() =>
+                                    handleDeleteTechnology(technology.id)
+                                  }
                                 />
                               </Box>
                             </Tooltip>
@@ -149,7 +156,11 @@ export default function Technologies() {
                                   boxSize="24px"
                                   color="green.400"
                                   as={RiPencilLine}
-                                  onClick={() => router.push(`/technologies/${technology.id}/update`)}
+                                  onClick={() =>
+                                    router.push(
+                                      `/technologies/${technology.id}/update`,
+                                    )
+                                  }
                                 />
                               </Box>
                             </Tooltip>
@@ -168,10 +179,13 @@ export default function Technologies() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = withSSRAuth(async (ctx) => {
-  return {
-    props: {},
-  };
-}, {
-  roles: ['administrator'],
-});
+export const getServerSideProps: GetServerSideProps = withSSRAuth(
+  async (ctx) => {
+    return {
+      props: {},
+    };
+  },
+  {
+    roles: ['administrator'],
+  },
+);

@@ -10,8 +10,7 @@ import { useGetTechnologiesByUser } from '@services/hooks/technologies/useGetTec
 import { withSSRAuth } from '@utils/withSSRAuth';
 
 export default function TechnologiesConstruction() {
-  const { data: technologies, isLoading } =
-    useGetTechnologiesByUser();
+  const { data: technologies, isLoading } = useGetTechnologiesByUser();
 
   return (
     <>
