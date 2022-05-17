@@ -122,7 +122,7 @@ export default function CreateContentCreator() {
 
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
-              <Link href="/users" passHref>
+              <Link href="/content-creators" passHref>
                 <Button colorScheme="whiteAlpha">Cancelar</Button>
               </Link>
               <Button type="submit" colorScheme="purple" isLoading={isSubmitting}>
