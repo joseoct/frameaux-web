@@ -1,34 +1,35 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<p align="center">
+  <a href="https://unform.dev">
+    <img src="https://i.imgur.com/pdGuGwr.png" alt="Frameaux_logo" />
+  </a>
+</p>
 
-## Getting Started
+<p align="center">Plataforma para auxiliar o aprendizado de tecnologias multiplataforma para o desenvolvimento de dispositivos móveis.
+</p>
 
-First, run the development server:
+## Frontend
+A  interface web conta  com  funcionalidades  para  que  administradores e criadores de conteúdo realizem suas funções.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+**Administradores** possuem como funções cadastrar e visualizar criadores de
+conteúdo; cadastrar, visualizar, editar e remover tecnologias. Para cadastrar uma
+nova tecnologia, o administrador deve, anteriormente, ter cadastrado criadores de
+conteúdo. Ao cadastrar a tecnologia, o administrador deve alocar quais são os
+criadores de conteúdo responsáveis por aquela tecnologia.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Criadores de conteúdo** desempenham funções relacionadas à tecnologia a
+qual foi alocada pelo administrador, e são responsáveis pela construção da trilha de
+conteúdos. Atuam no papel de gerenciar os tópicos, níveis e exercícios de
+uma tecnologia. 
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+![FrameAuxLogin](https://i.imgur.com/UtPXXUG.gif)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+Cada página, de modo a ilustrar, possui marcações vermelhas que tenham
+relação com o número da requisição feita para o backend segundo [quadro de rotas do backend](https://github.com/joseoct/frameaux-backend#rotas-do-backend).
+As páginas também estão cortadas a fim de otimizar o espaço de leitura.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+#### (Administrador) Página Dashboard
+<img src="https://i.imgur.com/QYhfF0o.png" alt="Frameaux_logo" />
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Tipo | Rota | Cargos | Descrição
+--- | --- | --- | --- 
+GET | 1. `/dashboard` | Administrador | Retorna número de tecnologias, criadores de conteúdo e estudantes
