@@ -1,7 +1,5 @@
 <p align="center">
-  <a href="https://unform.dev">
-    <img src="https://i.imgur.com/pdGuGwr.png" alt="Frameaux_logo" />
-  </a>
+  <img src="https://i.imgur.com/pdGuGwr.png" alt="Frameaux_logo" />
 </p>
 
 <p align="center">
