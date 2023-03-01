@@ -101,3 +101,5 @@ POST | 16. `/technologies/topics/levels/`<br>`:level_id/alternative-exercise` | 
 Tipo | Rota | Cargos | Descrição
 --- | --- | --- | --- 
 POST | 17. `/technologies/topics/levels/`<br>`:level_id/sequency-exercise` | Criador de conteúdo | Cria um exercício de sequência que faz relação ao nível informado na rota
+
+[Link](https://drive.google.com/file/d/1wNvaCHskW_Ky1QivsNj1tYBnb6Hm9ljS/view) para conferir o trabalho completo.
