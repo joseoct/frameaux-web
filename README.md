@@ -62,7 +62,8 @@ DELETE | 9. `/technologies/:technology_id` | Administrador | Exclui a tecnologia
 Tipo | Rota | Cargos | Descrição
 --- | --- | --- | --- 
 GET | 3. `/content-creators` | Administrador | Lista criadores de conteúdo e tecnologias em que foram alocados.
-POST | 7. `/content-creators-technologies` | Administrador | Cria uma tecnologia e aloca criadores de conteúdo à tecnologia criadaGET8. /content-creators-technologiesAdministradorLista todas as tecnologias e seus criadores de conteúdo responsáveis
+POST | 7. `/content-creators-technologies` | Administrador | Cria uma tecnologia e aloca criadores de conteúdo à tecnologia criada
+GET | 8. `/content-creators-technologies` | Administrador | Lista todas as tecnologias e seus criadores de conteúdo responsáveis
 
 #### (Criador de conteúdo) Página de listagem das tecnologias responsáveis
 <img src="https://i.imgur.com/78nIUxN.png" alt="content_creator_list" />
